@@ -1,15 +1,16 @@
-Dir['/home/magnus/odinproject/ruby/ruby_projects/chess/lib/*'].each { |file| require file }
+Dir['./lib/*'].each { |file| require file }
+# require '/Users/School/Documents/odinproject/chess/lib/node'
 
-describe Node do
-	subject(:step_finder) { described_class.new }
-	let(:knight) {instance_double('knight')}
-	describe '#knight_moves' do
-		xit 'prints knights moves when given starting position' do
-			possible_moves([3, 3], [4, 3], knight.moves)
-			expect(possible_moves([3, 3], [4, 3], knight.moves)).to eq([[3,3],[4,5],[2,4],[4,3]])
-		end
-	end
-end
+# describe Node do
+# 	subject(:step_finder) { described_class.new }
+# 	let(:knight) {instance_double('knight')}
+# 	describe '#knight_moves' do
+# 		xit 'prints knights moves when given starting position' do
+# 			possible_moves([3, 3], [4, 3], knight.moves)
+# 			expect(possible_moves([3, 3], [4, 3], knight.moves)).to eq([[3,3],[4,5],[2,4],[4,3]])
+# 		end
+# 	end
+# end
 
 describe Game do
 	let(:player1) { instance_double('player1')}
@@ -121,7 +122,7 @@ describe Pawn do
 		it 'forbids diagonal attack if space empty' do
 			from = [1, 0]
 			to = [2, 1]
-			expect(check_forbidden.forbidden?(from, to, [[0, 1, 2, 3], [0, 1, 2, 3], [0,' ', 2, 3], [0, 1, 2, 3]])).to be false
+			expect(check_forbidden.forbidden?(from, to, [[0, 1, 2, 3], [0, 1, 2, 3], [0, ' ', 2, 3], [0, 1, 2, 3]])).to be true
 		end
 	end
 end

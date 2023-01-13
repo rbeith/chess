@@ -13,25 +13,27 @@ class Pawn < Piece
 		@sign = '♙'
 	end
 
+	def first_move?
+		@first_move = true
+	end
+
 	def forbidden?(from, to, board)
-		#if there is a piece on the space in front of the
-		#same column on the board, cannot move
-		if [to[0], to[1]] != [from[0]+1, from[1]]
-			true
-		elsif 
-			board[to[0]][to[1]] != ' ' || board[to[0]][to[1]] != self.sign
-		  true
-		else 
-			false
-		end
 		
-		#may move diagonally from current position if there is a piece to kill
+		case 
+		when board[to[0]][to[1]] == ' '
+			true
+		when [to[0], to[1]] == [from[0]+1, from[1]]
+			false
+		when board[to[0]][to[1]] == self.sign
+			false
+		else
+			true
+		end
 		#may move two spaces in the same column on the first move/from the start position
-		#...
 		#location of piece in column + 1
 		#unless first move (@first??) 
-		#piece in column + 1 + row +||- 1 if
-	 	#to loc contains piece
+		# or just when not on starting position? 
+
 	end
 
 	# def white_starting_positions(board???)

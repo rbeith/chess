@@ -53,6 +53,8 @@ class Board
 	# end
 
 	def move_piece(player, from = player.select_piece, to = player.select_space)
+		return unless @board[from[0]][from[1]].forbidden?(from, to, @board) == false
+
 		@board[to[0]][to[1]] = @board[from[0]][from[1]]
 		@board[from[0]][from[1]] = Piece.new
 	end

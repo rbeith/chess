@@ -1,4 +1,4 @@
-require '/home/magnus/odinproject/ruby/ruby_projects/chess/lib/piece.rb'
+require './lib/piece.rb'
 
 class Bishop < Piece
 	
