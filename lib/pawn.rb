@@ -1,5 +1,5 @@
-class Pawn < Piece
-	attr_reader :sign, :black, :white
+class WhitePawn < Piece
+	attr_reader :sign, :white
 
 	def initialize(sign = ' ')
 		@sign = sign

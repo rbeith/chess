@@ -13,7 +13,8 @@ Dir['./lib/*'].each { |file| require file }
 # end
 
 describe Game do
-	let(:player1) { instance_double('player1')}
+	let(:player1) { instance_double('player1') }
+	let(:player2) { instance_double('player2') }
 
 	describe '#move_piece' do
 		subject(:movement) { described_class.new }
@@ -30,7 +31,7 @@ describe Game do
 		subject(:killer) { described_class.new }
 
 		it 'deletes a piece if taken by another player' do
-			killer.game_board.move_piece(player1, [6, 1], [2, 0])
+			killer.game_board.move_piece(player2, [6, 1], [2, 0])
 			expect(killer.game_board.board[2][0].sign).to eq('♟︎')
 		end
 	end
@@ -92,7 +93,7 @@ describe Player do
 	end
 end
 
-describe Pawn do
+describe WhitePawn do
 	subject(:check_forbidden) { described_class.new }
 
 	
