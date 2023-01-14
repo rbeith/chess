@@ -3,6 +3,7 @@ class Pawn < Piece
 
 	def initialize(sign = ' ')
 		@sign = sign
+		@moved = false
 	end
 
 	def black
@@ -13,15 +14,17 @@ class Pawn < Piece
 		@sign = '♙'
 	end
 
-	def first_move?
-		@first_move = true
+	def moved?
+		@moved = true
 	end
 
 	def forbidden?(from, to, board)
-		
+		p @moved
 		case 
 		when board[to[0]][to[1]] == ' '
 			true
+		when [to[0], to[1]] == [from[0]+2, from[1]] && @moved == false
+			false
 		when [to[0], to[1]] == [from[0]+1, from[1]]
 			false
 		when board[to[0]][to[1]] == self.sign
@@ -33,7 +36,6 @@ class Pawn < Piece
 		#location of piece in column + 1
 		#unless first move (@first??) 
 		# or just when not on starting position? 
-
 	end
 
 	# def white_starting_positions(board???)
@@ -45,7 +47,6 @@ class Pawn < Piece
 	# 	starting_position = [6,0], [6,1], [6,2], [6,3], [6,4], [6,5], [6,6], [6,7]
 	# end
 
-	
 end
 
 	
