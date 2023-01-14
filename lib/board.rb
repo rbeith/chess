@@ -11,8 +11,8 @@ class Board
 		@board[0][5] = Knight.new('♘')
 		@board[0][6] = Bishop.new('♗')
 		@board[0][7] = Rook.new('♖')
-		@board[1].map! { |i| i = Pawn.new('♙') }
-		@board[6].map! { |i| i = Pawn.new('♟︎') }
+		@board[1].map! { |i| i = WhitePawn.new }
+		@board[6].map! { |i| i = BlackPawn.new }
 		@board[7][0] = Rook.new('♜')
 		@board[7][1] = Bishop.new('♝')
 		@board[7][2] = Knight.new('♞')
@@ -52,9 +52,13 @@ class Board
 	# 	@board[from[0]][from[1]] = Piece.new
 	# end
 
-	def move_piece(player, from = player.select_piece, to = player.select_space)
-		return unless @board[from[0]][from[1]].forbidden?(from, to, @board) == false
-
+	def move_piece(player)
+		from = player.select_piece
+		to = player.select_space 
+		until @board[from[0]][from[1]].forbidden?(from, to, @board) == false
+			puts "Illegal move, choose space again."
+			to = player.select_space
+		end
 		@board[to[0]][to[1]] = @board[from[0]][from[1]]
 		@board[from[0]][from[1]].moved?
 		@board[from[0]][from[1]] = Piece.new
