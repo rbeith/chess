@@ -11,7 +11,7 @@ end
 
 # check if move is allowed
 def legal_move?(row, col)
-	row.between?(0, 7) && col.between?(0, 7)
+  row.between?(0, 7) && col.between?(0, 7)
 end
 
 # iterate through all possible moves from current location
@@ -20,7 +20,7 @@ def find_path(node, finish, queue, moves)
   while i >= 0
     row = node.location[0] + moves[0][i]
     col = node.location[1] + moves[1][i]
-    legal_move?(row, col) ? i -= 1 : i -= 2
+    i -= legal_move?(row, col) ? 1 : 2
     # create node and insert into queue
     return node if [row, col] == finish
 
@@ -33,15 +33,15 @@ end
 # searches the node tree to print the location of the knight from each node
 def print_path(node, path = [])
   node.predecessor.nil? ? node.location : print_path(node.predecessor, path)
-	path << node.location
+  path << node.location
 end
 
 # accepts coordinates to find path -- main function
 def possible_moves(start, finish, q = Queue.new, moves)
-	Board.new.make_board
-	q << node = Node.new(start)
-	
-	answer = find_path(node, finish, q, moves)
-	path = print_path(answer)
-	path << finish
+  Board.new.make_board
+  q << node = Node.new(start)
+
+  answer = find_path(node, finish, q, moves)
+  path = print_path(answer)
+  path << finish
 end

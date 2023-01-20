@@ -1,35 +1,35 @@
 class WhitePawn < Piece
-	attr_reader :sign, :white
+  attr_reader :sign, :white
 
-	def initialize(sign = '♙')
-		@sign = sign
-		@moved = false
-	end
+  def initialize(sign = '♙')
+    @sign = sign
+    @moved = false
+  end
 
-	def moved?
-		@moved = true
-	end
+  def moved?
+    @moved = true
+  end
 
-	def forbidden?(from, to, board)
-		case 
-		when [to[0], to[1]] == [from[0]+1, from[1]]
-			false
-		when [to[0], to[1]] == [from[0]+2, from[1]] && from[0] == 1
-			false
-		when [to[0], to[1]] == [from[0]+1, from[1]+1] && board[to[0]][to[1]] != self.sign && board[to[0]][to[1]] != ' '
-			false
-		when [to[0], to[1]] == [from[0]+1, from[1]-1] && board[to[0]][to[1]] != self.sign && board[to[0]][to[1]] != ' '
-			false
-		else
-			true
-		end
-	end
+  def conditions(board, start_row, start_column, end_row, end_column)
+    if [end_row, end_column] == [start_row + 1, start_column]
+      false
+    elsif [end_row, end_column] == [start_row + 2, start_column] && start_row == 1
+      false
+    elsif [end_row,
+           end_column] == [start_row + 1,
+                           start_column + 1] && board[end_row][end_column] != sign && board[end_row][end_column] != ' '
+      false
+    elsif [end_row,
+           end_column] == [start_row + 1,
+                           start_column - 1] && board[end_row][end_column] != sign && board[end_row][end_column] != ' '
+      false
+    else
+      true
+    end
+  end
 
-	# def white_starting_positions(board???)
-	# 	starting_position = [1, 1, 1, 1, 1, 1, 1, 1 [0..7]]
-	  # board[1][1]
-	# end
-
+  # def white_starting_positions(board???)
+  # 	starting_position = [1, 1, 1, 1, 1, 1, 1, 1 [0..7]]
+  # board[1][1]
+  # end
 end
-
-	

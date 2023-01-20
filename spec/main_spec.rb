@@ -12,195 +12,192 @@ require_relative '../lib/main'
 # end
 
 describe Game do
-	subject(:movement) { described_class.new }
-	let(:player1) { instance_double('player1') }
-	let(:player2) { instance_double('player2') }
-	
-	describe '#move_piece' do
-		it 'moves a game piece to a new space' do
-			allow(player1).to receive(:select_piece).and_return([1, 0])
-			allow(player1).to receive(:select_space).and_return([2, 0])
-			movement.game_board.move_piece(player1)
-			expect(movement.game_board.board[2][0].sign).to eq('♙')
-		end
-	end
+  subject(:movement) { described_class.new }
+  let(:player1) { instance_double('player1') }
+  let(:player2) { instance_double('player2') }
 
-	describe '#kill_piece' do
-		it 'deletes a piece if taken by another player' do
-			movement.game_board.board[3][1] = movement.game_board.board[6][1]
-			allow(player2).to receive(:select_piece).and_return([3, 1])
-			allow(player2).to receive(:select_space).and_return([2, 0])
-			movement.game_board.move_piece(player2)
-			expect(movement.game_board.board[2][0].sign).to eq('♟︎')
-		end
-	end
+  describe '#move_piece' do
+    it 'moves a game piece to a new space' do
+      allow(player1).to receive(:select_piece).and_return([1, 0])
+      allow(player1).to receive(:select_space).and_return([2, 0])
+      movement.game_board.move_piece(player1)
+      expect(movement.game_board.board[2][0].sign).to eq('♙')
+    end
+  end
+
+  describe '#kill_piece' do
+    it 'deletes a piece if taken by another player' do
+      movement.game_board.board[3][1] = movement.game_board.board[6][1]
+      allow(player2).to receive(:select_piece).and_return([3, 1])
+      allow(player2).to receive(:select_space).and_return([2, 0])
+      movement.game_board.move_piece(player2)
+      expect(movement.game_board.board[2][0].sign).to eq('♟︎')
+    end
+  end
 end
 
 describe Board do
-	subject(:movement) { described_class.new(ChessBoard.new.piece) }
-	let(:player1) { instance_double('player1')}
+  subject(:movement) { described_class.new(ChessBoard.new.piece) }
+  let(:player1) { instance_double('player1') }
 
-	describe '#move_piece' do
-		it 'moves a game piece to a new space' do
-			allow(player1).to receive(:select_piece).and_return([1, 0])
-			allow(player1).to receive(:select_space).and_return([2, 0])
-			movement.move_piece(player1)
-			expect(movement.board[2][0].sign).to eq('♙')
-		end
+  describe '#move_piece' do
+    it 'moves a game piece to a new space' do
+      allow(player1).to receive(:select_piece).and_return([1, 0])
+      allow(player1).to receive(:select_space).and_return([2, 0])
+      movement.move_piece(player1)
+      expect(movement.board[2][0].sign).to eq('♙')
+    end
 
-		it 'resets the previous space' do
-			allow(player1).to receive(:select_piece).and_return([1, 0])
-			allow(player1).to receive(:select_space).and_return([2, 0])
-			movement.move_piece(player1)
-			expect(movement.board[1][0].sign).to eq(' ')
-		end
-	end
-
+    it 'resets the previous space' do
+      allow(player1).to receive(:select_piece).and_return([1, 0])
+      allow(player1).to receive(:select_space).and_return([2, 0])
+      movement.move_piece(player1)
+      expect(movement.board[1][0].sign).to eq(' ')
+    end
+  end
 end
 
 describe Player do
-	let(:board) { instance_double('game_board') }
-	
-	describe '#board_location' do
-		subject(:inputs) { described_class.new }
+  let(:board) { instance_double('game_board') }
 
-		it 'accepts a two character input and retuns array coordinates' do
-			allow(inputs).to receive(:gets).and_return('b1')
-			expect(inputs.board_location).to eq([1, 0])
-		end
-	end
+  describe '#board_location' do
+    subject(:inputs) { described_class.new }
 
-	
-	describe '#select_piece' do
-		subject(:piece) { described_class.new }
+    it 'accepts a two character input and retuns array coordinates' do
+      allow(inputs).to receive(:gets).and_return('b1')
+      expect(inputs.board_location).to eq([1, 0])
+    end
+  end
 
-		it 'allows user to select space and returns board coordinates' do
-			allow(piece).to receive(:gets).and_return('b1')
-			piece.select_piece
-			expect(piece.board_location).to eq([1, 0])
-		end
-	end
+  describe '#select_piece' do
+    subject(:piece) { described_class.new }
 
-	describe '#select_space' do
-		subject(:space) { described_class.new }
+    it 'allows user to select space and returns board coordinates' do
+      allow(piece).to receive(:gets).and_return('b1')
+      piece.select_piece
+      expect(piece.board_location).to eq([1, 0])
+    end
+  end
 
-		it 'allows user to select space and returns board coordinates' do
-			allow(space).to receive(:gets).and_return('b1')
-			space.select_space
-			expect(space.board_location).to eq([1, 0])
-		end
-	end
+  describe '#select_space' do
+    subject(:space) { described_class.new }
+
+    it 'allows user to select space and returns board coordinates' do
+      allow(space).to receive(:gets).and_return('b1')
+      space.select_space
+      expect(space.board_location).to eq([1, 0])
+    end
+  end
 end
 
 describe WhitePawn do
-	subject(:check_forbidden) { described_class.new }
+  subject(:check_forbidden) { described_class.new }
 
-	
-	describe '#forbidden?' do
-		before do
-			@board = [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]]
-		end
+  describe '#forbidden?' do
+    before do
+      @board = [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]]
+    end
 
-		it 'forbids illegal move' do
-			from = [1, 0]
-			to = [4, 0]
-			expect(check_forbidden.forbidden?(from, to, @board)).to be true
-		end
+    it 'forbids illegal move' do
+      from = [1, 0]
+      to = [4, 0]
+      expect(check_forbidden.forbidden?(from, to, @board)).to be true
+    end
 
-		it 'allows legal move' do
-			from = [1, 0]
-			to = [2, 0]
-			expect(check_forbidden.forbidden?(from, to, @board)).to be false
-		end
+    it 'allows legal move' do
+      from = [1, 0]
+      to = [2, 0]
+      expect(check_forbidden.forbidden?(from, to, @board)).to be false
+    end
 
-		it 'allows pawn to attack diagonally' do
-			from = [1, 0]
-			to = [2, 1]
-			expect(check_forbidden.forbidden?(from, to, [[0, 1, 2, 3], [0, 1, 2, 3], [0, 'x', 2, 3], [0, 1, 2, 3]])).to be false
-		end
+    it 'allows pawn to attack diagonally' do
+      from = [1, 0]
+      to = [2, 1]
+      expect(check_forbidden.forbidden?(from, to,
+                                        [[0, 1, 2, 3], [0, 1, 2, 3], [0, 'x', 2, 3], [0, 1, 2, 3]])).to be false
+    end
 
-		it 'forbids diagonal attack if space empty' do
-			from = [1, 0]
-			to = [2, 1]
-			expect(check_forbidden.forbidden?(from, to, [[0, 1, 2, 3], [0, 1, 2, 3], [0, ' ', 2, 3], [0, 1, 2, 3]])).to be true
-		end
-	end
+    it 'forbids diagonal attack if space empty' do
+      from = [1, 0]
+      to = [2, 1]
+      expect(check_forbidden.forbidden?(from, to,
+                                        [[0, 1, 2, 3], [0, 1, 2, 3], [0, ' ', 2, 3], [0, 1, 2, 3]])).to be true
+    end
+  end
 end
 
 describe WhiteKing do
-	subject(:king) { described_class.new }
+  subject(:king) { described_class.new }
 
-	it 'cannot move when there is a piece in front of it' do
-		from = [0, 1]
-		to = [1, 1]
-		board = [[0, 1, 2], [0, WhitePawn.new, 2]]
-		expect(king.forbidden?(from, to, board)).to be true
-	end
+  it 'cannot move when there is a piece in front of it' do
+    from = [0, 1]
+    to = [1, 1]
+    board = [[0, 1, 2], [0, WhitePawn.new, 2]]
+    expect(king.forbidden?(from, to, board)).to be true
+  end
 end
 
 describe WhiteBishop do
-	
-	subject(:diagonal) { described_class.new }
-	board = Array.new(4) { Array.new(4, Piece.new) }
-	
-	it 'can move along a diagonal' do
-		from = [0, 0]
-		to = [3, 3]
-		expect(diagonal.forbidden?(from, to, board)).to be false
+  subject(:diagonal) { described_class.new }
+  board = Array.new(4) { Array.new(4, Piece.new) }
+
+  it 'can move along a diagonal' do
+    from = [0, 0]
+    to = [3, 3]
+    expect(diagonal.forbidden?(from, to, board)).to be false
   end
 
-	it 'cannot move onto an occupied space' do
-		from = [0, 0]
-		to = [3, 3]
-		board[3][3] = WhitePawn.new
-		expect(diagonal.forbidden?(from, to, board)).to be true
-	end
+  it 'cannot move onto an occupied space' do
+    from = [0, 0]
+    to = [3, 3]
+    board[3][3] = WhitePawn.new
+    expect(diagonal.forbidden?(from, to, board)).to be true
+  end
 
-	it 'cannot move in a straight line' do
-		from = [0, 0]
-		to = [0, 3]
-		expect(diagonal.forbidden?(from, to, board)).to be true
-	end
+  it 'cannot move in a straight line' do
+    from = [0, 0]
+    to = [0, 3]
+    expect(diagonal.forbidden?(from, to, board)).to be true
+  end
 end
 
 describe WhiteQueen do
+  subject(:queen) { described_class.new }
+  board = Array.new(4) { Array.new(4, Piece.new) }
 
-	subject(:queen) { described_class.new }
-	board = Array.new(4) { Array.new(4, Piece.new) }
+  it 'can move in a straight down a column' do
+    from = [0, 0]
+    to = [3, 0]
+    expect(queen.forbidden?(from, to, board)).to be false
+  end
 
-	it 'can move in a straight down a column' do
-		from = [0, 0]
-		to = [3, 0]
-		expect(queen.forbidden?(from, to, board)).to be false
-	end
+  it 'can move along a row' do
+    from = [0, 0]
+    to = [0, 3]
+    expect(queen.forbidden?(from, to, board)).to be false
+  end
 
-	it 'can move along a row' do
-		from = [0, 0]
-		to = [0, 3]
-		expect(queen.forbidden?(from, to, board)).to be false
-	end
+  it 'can move along a diagonal' do
+    from = [0, 0]
+    to = [3, 3]
+    expect(queen.forbidden?(from, to, board)).to be false
+  end
 
-	it 'can move along a diagonal' do
-		from = [0, 0]
-		to = [3, 3]
-		expect(queen.forbidden?(from, to, board)).to be false
-	end
-
-	it 'cannot move to an occupied space' do
-		from = [0, 0]
-		to = [1, 0]
-		board[1][0] = WhitePawn.new
-		expect(queen.forbidden?(from, to, board)).to be true
-	end
+  it 'cannot move to an occupied space' do
+    from = [0, 0]
+    to = [1, 0]
+    board[1][0] = WhitePawn.new
+    expect(queen.forbidden?(from, to, board)).to be true
+  end
 end
 
 describe WhiteRook do
-	subject(:rook) { described_class.new }
-	board = Array.new(4) { Array.new(4, Piece.new) }
+  subject(:rook) { described_class.new }
+  board = Array.new(4) { Array.new(4, Piece.new) }
 
-	it 'can move in a straight down a column' do
-		from = [0, 0]
-		to = [3, 0]
-		expect(rook.forbidden?(from, to, board)).to be false
-	end
+  it 'can move in a straight down a column' do
+    from = [0, 0]
+    to = [3, 0]
+    expect(rook.forbidden?(from, to, board)).to be false
+  end
 end

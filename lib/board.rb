@@ -1,14 +1,14 @@
 class Board
-	attr_accessor :board
+  attr_accessor :board
 
-	def initialize(board, empty_space = Piece.new)
-		@board = board
-		@empty_space = empty_space
-	end
+  def initialize(board, empty_space = Piece.new)
+    @board = board
+    @empty_space = empty_space
+  end
 
-	def draw_board
-		<<-BOARD
-                    1   2   3   4   5   6   7   8 
+  def draw_board
+    <<-BOARD
+                    1   2   3   4   5   6   7   8#{' '}
 		a | #{@board[0][0].sign} | #{@board[0][1].sign} | #{@board[0][2].sign} | #{@board[0][3].sign} | #{@board[0][4].sign} | #{@board[0][5].sign} | #{@board[0][6].sign} | #{@board[0][7].sign} |
 		  ---------------------------------
 		b | #{@board[1][0].sign} | #{@board[1][1].sign} | #{@board[1][2].sign} | #{@board[1][3].sign} | #{@board[1][4].sign} | #{@board[1][5].sign} | #{@board[1][6].sign} | #{@board[1][7].sign} |
@@ -25,39 +25,38 @@ class Board
 		  ---------------------------------
 		h | #{@board[7][0].sign} | #{@board[7][1].sign} | #{@board[7][2].sign} | #{@board[7][3].sign} | #{@board[7][4].sign} | #{@board[7][5].sign} | #{@board[7][6].sign} | #{@board[7][7].sign} |
 		  ---------------------------------
-		BOARD
-	end
+    BOARD
+  end
 
-	def assign_new_space(end_space, start_space)
-		@board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]	
-	end
+  def assign_new_space(end_space, start_space)
+    @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
+  end
 
-	def assign_empty_space(start_space)
-		@board[start_space[0]][start_space[1]] = @empty_space
-	end
+  def assign_empty_space(start_space)
+    @board[start_space[0]][start_space[1]] = @empty_space
+  end
 
-	def end_space(player)
-		player.select_space
-	end
-	
-	def start_space(player)
-		player.select_piece
-	end
-	
-	def move_piece(player)
-		start_space = start_space(player)
-	  end_space = end_space(player)
-		start_piece = @board[start_space[0]][start_space[1]]
-		verify_input(player, start_piece, end_space, start_space)
-		assign_new_space(end_space, start_space)
-		assign_empty_space(start_space)
-	end
+  def end_space(player)
+    player.select_space
+  end
 
-	def verify_input(player, start_piece, end_space, start_space)
-		until start_piece.forbidden?(start_space, end_space, board) == false
-			puts "Illegal move, choose space again or type 'cancel' to choose another piece"
-			move_piece(player) if gets.chomp == 'cancel' 
-		end
-	end
+  def start_space(player)
+    player.select_piece
+  end
 
+  def move_piece(player)
+    start_space = start_space(player)
+    end_space = end_space(player)
+    start_piece = @board[start_space[0]][start_space[1]]
+    verify_input(player, start_piece, end_space, start_space)
+    assign_new_space(end_space, start_space)
+    assign_empty_space(start_space)
+  end
+
+  def verify_input(player, start_piece, end_space, start_space)
+    until start_piece.forbidden?(start_space, end_space, board) == false
+      puts "Illegal move, choose space again or type 'cancel' to choose another piece"
+      move_piece(player) if gets.chomp == 'cancel'
+    end
+  end
 end

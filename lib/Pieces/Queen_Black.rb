@@ -1,12 +1,12 @@
 require_relative 'Queen_moves'
 
 class BlackQueen < Piece
-	include Queenmoves
+  include Queenmoves
 
-	attr_reader :sign
+  attr_reader :sign
 
-	def initialize(sign = '♛')
-		@sign = sign
-		@moves
-	end
+  def initialize(sign = '♛')
+    @sign = sign
+    @moves
+  end
 end
