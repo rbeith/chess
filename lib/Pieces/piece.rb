@@ -15,8 +15,11 @@ class Piece
 	end
 
 	def forbidden?(from, to, board)
-		true if board[to[0]][to[1]].sign != ' '
+		start_row = from[0]
+		start_column = from[1]
+	  end_row = to[0]
+	  end_column = to[1]
+		self.conditions(board, start_row, start_column, end_row, end_column)
 	end
-		
-	
+
 end
