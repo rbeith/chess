@@ -193,3 +193,14 @@ describe WhiteQueen do
 		expect(queen.forbidden?(from, to, board)).to be true
 	end
 end
+
+describe WhiteRook do
+	subject(:rook) { described_class.new }
+	board = Array.new(4) { Array.new(4, Piece.new) }
+
+	it 'can move in a straight down a column' do
+		from = [0, 0]
+		to = [3, 0]
+		expect(rook.forbidden?(from, to, board)).to be false
+	end
+end

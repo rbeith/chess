@@ -1,5 +1,5 @@
 require './lib/Pieces/piece.rb'
-require_relative 'Bishopmoves'
+require_relative 'Bishop_moves'
 
 class BlackBishop < Piece
 	include Bishopmoves

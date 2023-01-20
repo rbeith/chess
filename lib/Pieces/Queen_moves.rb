@@ -1,30 +1,17 @@
 module Queenmoves
 	
-	def forbidden?(from, to, board)
-		start_row = from[0]
-		start_column = from[1]
-	  end_row = to[0]
-	  end_column = from[1]
-
+	def conditions(board, start_row, start_column, end_row, end_column)
+		dx = (end_column - start_column).abs
+		dy = (end_row - start_row).abs
+			
 		case
-		when board[to[0]][to[1]].sign != ' '
-			true
-			#add iterator to check each space along the way
-		when end_column > start_column
+		when board[end_row][end_column].sign != ' '
+		  true
+		when dx == dy && dx > 0
 			false
-		when end_column < start_column
+		when end_column > start_column || end_column < start_column
 			false
-		when end_row > start_row
-			false
-		when end_row < start_row
-			false
-		when end_row > start_row && end_column > start_column
-			false
-		when end_row < start_row && end_column < start_column
-			false
-		when end_row > start_row && end_column < start_column
-			false
-		when end_row < start_row && end_column > start_column
+		when end_row > start_row || end_row < start_row
 			false
 		else
 			true

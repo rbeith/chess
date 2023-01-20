@@ -1,24 +1,24 @@
 module Kingmoves 
 
-	def forbidden?(from, to, board)
-		p case
-		when board[to[0]][to[1]].sign != ' '
+	def conditions(board, start_row, start_column, end_row, end_column)
+		case
+		when board[end_row][end_column].sign != ' '
 			true
-		when [to[0], to[1]] == [from[0]+1, from[1]]
+		when [end_row, end_column] == [start_row+1, start_column]
 			false
-		when [to[0], to[1]] == [from[0]-1, from[1]]
+		when [end_row, end_column] == [start_row-1, start_column]
 			false
-		when [to[0], to[1]] == [from[0], from[1]+1]
+		when [end_row, end_column] == [start_row, start_column+1]
 			false
-		when [to[0], to[1]] == [from[0], from[1]-1]
+		when [end_row, end_column] == [start_row, start_column-1]
 			false
-		when [to[0], to[1]] == [from[0]+1, from[1]-1]
+		when [end_row, end_column] == [start_row+1, start_column-1]
 			false
-		when [to[0], to[1]] == [from[0]-1, from[1]+1]
+		when [end_row, end_column] == [start_row-1, start_column+1]
 			false
-		when [to[0], to[1]] == [from[0]+1, from[1]+1]
+		when [end_row, end_column] == [start_row+1, start_column+1]
 			false
-		when [to[0], to[1]] == [from[0]-1, from[1]-1]
+		when [end_row, end_column] == [start_row-1, start_column-1]
 			false
 		else
 			true
