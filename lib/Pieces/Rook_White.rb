@@ -1,7 +1,7 @@
-class Rook < Piece
+class WhiteRook < Piece
 	attr_reader :sign
 
-	def initialize(sign)
+	def initialize(sign = '♖')
 		@sign = sign
 		@moves
 	end

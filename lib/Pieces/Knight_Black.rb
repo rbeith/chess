@@ -1,7 +1,9 @@
-class Knight < Piece
+require './lib/Pieces/piece.rb'
+
+class BlackKnight < Piece
 	attr_reader :sign, :moves
 	
-	def initialize(sign)
+	def initialize(sign = '♞')
 		@sign = sign
 		@moves = [[2, 2, 1, -1, -2, -2, -1, 1], [1, -1, -2, -2, -1, 1, 2, 2]]
 	end

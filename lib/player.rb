@@ -14,7 +14,7 @@ class Player
 		board_location(gets.chomp)
 	end
 
-	def board_location(input = gets.chomp)
+	def letter_to_row(input)
 		y_coordinate_hash = {
 			:a => 0,
 			:b => 1,
@@ -25,9 +25,12 @@ class Player
 			:g => 6,
 			:h => 7,
 		}
+		y_coordinate_hash[input]
+	end
 
+	def board_location(input = gets.chomp)
 		arr = input.split(//)
-		arr[0] = y_coordinate_hash[arr[0].to_sym]
+		arr[0] = letter_to_row(arr[0].to_sym)
 		arr[1] = arr[1].to_i - 1
 		arr
 	end

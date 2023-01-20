@@ -1,26 +1,9 @@
 class Board
 	attr_accessor :board
 
-	def initialize
-		@board = Array.new(8) { Array.new(8, Piece.new) }
-		@board[0][0] = Rook.new('♖')
-		@board[0][1] = Bishop.new('♗')
-		@board[0][2] = Knight.new('♘')
-		@board[0][3] = Queen.new('♕')
-		@board[0][4] = King.new('♔')
-		@board[0][5] = Knight.new('♘')
-		@board[0][6] = Bishop.new('♗')
-		@board[0][7] = Rook.new('♖')
-		@board[1].map! { |i| i = WhitePawn.new }
-		@board[6].map! { |i| i = BlackPawn.new }
-		@board[7][0] = Rook.new('♜')
-		@board[7][1] = Bishop.new('♝')
-		@board[7][2] = Knight.new('♞')
-		@board[7][3] = Queen.new('♛')
-		@board[7][4] = King.new('♚')
-		@board[7][5] = Knight.new('♞')
-		@board[7][6] = Bishop.new('♝')
-		@board[7][7] = Rook.new('♜')
+	def initialize(board, empty_space = Piece.new)
+		@board = board
+		@empty_space = empty_space
 	end
 
 	def draw_board
@@ -45,22 +28,36 @@ class Board
 		BOARD
 	end
 
-	# def move_piece(player, from = player.select_piece, to = player.select_space)
-	# 	return if @board[to[0]][to[1]].forbidden?(@board[from[0]][from[1]])
-
-	# 	@board[to[0]][to[1]] = @board[from[0]][from[1]]
-	# 	@board[from[0]][from[1]] = Piece.new
-	# end
-
-	def move_piece(player)
-		from = player.select_piece
-		to = player.select_space 
-		until @board[from[0]][from[1]].forbidden?(from, to, @board) == false
-			puts "Illegal move, choose space again."
-			to = player.select_space
-		end
-		@board[to[0]][to[1]] = @board[from[0]][from[1]]
-		@board[from[0]][from[1]].moved?
-		@board[from[0]][from[1]] = Piece.new
+	def assign_new_space(end_space, start_space)
+		@board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]	
 	end
+
+	def assign_empty_space(start_space)
+		@board[start_space[0]][start_space[1]] = @empty_space
+	end
+
+	def end_space(player)
+		player.select_space
+	end
+	
+	def start_space(player)
+		player.select_piece
+	end
+	
+	def move_piece(player)
+		start_space = start_space(player)
+	  end_space = end_space(player)
+		start_piece = @board[start_space[0]][start_space[1]]
+		verify_input(player, start_piece, end_space, start_space)
+		assign_new_space(end_space, start_space)
+		assign_empty_space(start_space)
+	end
+
+	def verify_input(player, start_piece, end_space, start_space)
+		until start_piece.forbidden?(start_space, end_space, board) == false
+			puts "Illegal move, choose space again or type 'cancel' to choose another piece"
+			move_piece(player) if gets.chomp == 'cancel' 
+		end
+	end
+
 end

@@ -3,10 +3,10 @@
 class Game
 	attr_reader :game_board, :white, :black, :gameover
 
-	def initialize
-		@game_board = Board.new
-		@white = Player.new('White')
-		@black = Player.new('Black')
+	def initialize(game_board = Board.new(ChessBoard.new.piece), player1 = Player.new('White'), player2 = Player.new('Black'))
+		@game_board = game_board
+		@player1 = player1 
+		@player2 = player2
 		@gameover = false
 	end
 
@@ -30,12 +30,12 @@ class Game
 	def play_game
     puts @game_board.draw_board
     until @game_over == true
-      turn(@white)
+      turn(@player1)
       puts @game_board.draw_board
 
       break if @game_over == true
 
-      turn(@black)
+      turn(@player2)
       puts @game_board.draw_board
     end
     declare_winner
