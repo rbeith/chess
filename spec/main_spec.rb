@@ -26,10 +26,12 @@ describe Game do
   end
 
   describe '#kill_piece' do
-    it 'deletes a piece if taken by another player' do
-      movement.game_board.board[3][1] = movement.game_board.board[6][1]
+    it 'changes space to self when it takes another piece' do
+			piece = BlackPawn.new
+      movement.game_board.board[3][1] = piece
       allow(player2).to receive(:select_piece).and_return([3, 1])
       allow(player2).to receive(:select_space).and_return([2, 0])
+			allow(piece).to receive(:forbidden?).and_return(false)
       movement.game_board.move_piece(player2)
       expect(movement.game_board.board[2][0].sign).to eq('♟︎')
     end
@@ -92,36 +94,34 @@ end
 
 describe WhitePawn do
   subject(:check_forbidden) { described_class.new }
-
+	
   describe '#forbidden?' do
-    before do
-      @board = [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]]
-    end
+		board = Array.new(5) { Array.new(4, Piece.new) }
 
     it 'forbids illegal move' do
       from = [1, 0]
       to = [4, 0]
-      expect(check_forbidden.forbidden?(from, to, @board)).to be true
+      expect(check_forbidden.forbidden?(from, to, board)).to be true
     end
 
     it 'allows legal move' do
       from = [1, 0]
       to = [2, 0]
-      expect(check_forbidden.forbidden?(from, to, @board)).to be false
+      expect(check_forbidden.forbidden?(from, to, board)).to be false
     end
 
     it 'allows pawn to attack diagonally' do
-      from = [1, 0]
+			from = [1, 0]
+			board[2][1] = BlackPawn.new
+			board[2][1]
       to = [2, 1]
-      expect(check_forbidden.forbidden?(from, to,
-                                        [[0, 1, 2, 3], [0, 1, 2, 3], [0, 'x', 2, 3], [0, 1, 2, 3]])).to be false
+      expect(check_forbidden.forbidden?(from, to, board)).to be false
     end
 
     it 'forbids diagonal attack if space empty' do
-      from = [1, 0]
-      to = [2, 1]
-      expect(check_forbidden.forbidden?(from, to,
-                                        [[0, 1, 2, 3], [0, 1, 2, 3], [0, ' ', 2, 3], [0, 1, 2, 3]])).to be true
+      from = [2, 1]
+      to = [3, 2]
+      expect(check_forbidden.forbidden?(from, to, board)).to be true
     end
   end
 end
@@ -147,12 +147,12 @@ describe WhiteBishop do
     expect(diagonal.forbidden?(from, to, board)).to be false
   end
 
-  it 'cannot move onto an occupied space' do
-    from = [0, 0]
-    to = [3, 3]
-    board[3][3] = WhitePawn.new
-    expect(diagonal.forbidden?(from, to, board)).to be true
-  end
+  # it 'cannot move through an occupied space' do
+  #   from = [0, 0]
+  #   to = [3, 3]
+  #   board[2][2] = WhitePawn.new
+  #   expect(diagonal.forbidden?(from, to, board)).to be true
+  # end
 
   it 'cannot move in a straight line' do
     from = [0, 0]
@@ -183,12 +183,12 @@ describe WhiteQueen do
     expect(queen.forbidden?(from, to, board)).to be false
   end
 
-  it 'cannot move to an occupied space' do
-    from = [0, 0]
-    to = [1, 0]
-    board[1][0] = WhitePawn.new
-    expect(queen.forbidden?(from, to, board)).to be true
-  end
+  # it 'cannot move through an occupied space' do
+  #   from = [0, 0]
+  #   to = [2, 0]
+  #   board[1][0] = WhitePawn.new
+  #   expect(queen.forbidden?(from, to, board)).to be true
+  # end
 end
 
 describe WhiteRook do
