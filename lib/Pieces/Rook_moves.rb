@@ -4,6 +4,8 @@ module Rookmoves
       false
     elsif end_row > start_row || end_row < start_row
       false
+		else 
+			true
     end
   end
 end

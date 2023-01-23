@@ -1,30 +1,25 @@
 class WhitePawn < Piece
-  attr_reader :sign, :white
+  attr_reader :sign
 
   def initialize(sign = '♙')
     @sign = sign
-    @moved = false
   end
 
-  def moved?
-    @moved = true
-  end
-
-  def conditions(board, start_row, start_column, end_row, end_column)
+  def conditions(board, start_row, start_column, end_row, end_column)	
     if [end_row, end_column] == [start_row + 1, start_column]
       false
-    elsif [end_row, end_column] == [start_row + 2, start_column] && start_row == 1
+    elsif start_row == 1 && [end_row, end_column] == [start_row + 2, start_column] 
       false
     elsif [end_row,
            end_column] == [start_row + 1,
-                           start_column + 1] && board[end_row][end_column] != sign && board[end_row][end_column] != ' '
+                           start_column + 1] && board[end_row][end_column].sign != ' '
       false
     elsif [end_row,
            end_column] == [start_row + 1,
-                           start_column - 1] && board[end_row][end_column] != sign && board[end_row][end_column] != ' '
+                           start_column - 1] && board[end_row][end_column].sign != ' '
       false
-    else
-      true
+		else 
+			true
     end
   end
 

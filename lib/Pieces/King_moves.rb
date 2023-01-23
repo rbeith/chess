@@ -18,6 +18,8 @@ module Kingmoves
       false
       # king cannot move into check
       # if king in check, must try to get out of check
+		else 
+			true
     end
   end
 end

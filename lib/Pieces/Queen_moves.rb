@@ -9,6 +9,8 @@ module Queenmoves
       false
     elsif end_row > start_row || end_row < start_row
       false
-    end
+		else 
+			true
+		end
   end
 end
