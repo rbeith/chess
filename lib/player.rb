@@ -1,17 +1,21 @@
 class Player
+	attr_reader :input
+
   def initialize(name = 'player')
     @name = name
+		@input
   end
 
   def select_piece
-    puts "#{@name}, select a piece to move."
-    puts "Enter column then row. eq: 'b1.'"
-    board_location(gets.chomp)
+    puts "#{@name}, select a piece to move. Enter column then row. eq: 'b1.'"
+    piece = gets.chomp
+		@input = board_location(piece)
   end
 
   def select_space
     puts 'Select the space to move your piece to'
-    board_location(gets.chomp)
+		space = gets.chomp
+    @input = board_location(space)
   end
 
   def letter_to_row(input)

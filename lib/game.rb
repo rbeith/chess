@@ -20,15 +20,23 @@ class Game
     puts "#{@winner} wins!"
   end
 
-	def request_save
-		puts "\nTo save your current game enter 'save'"
-		save_game if gets.chomp == 'save'
+	def get_input(player_selection)
+		puts "Enter 'save' to save game or 'exit' to quit."
+		p input = player_selection
+		if input == 'save'
+			save_game
+		elsif input == 'exit'
+			exit
+		else 
+			input
+		end
 	end
 
 	def turn(player)
+		get_input(player.select_piece)
+		get_input(player.select_space)
     @game_board.move_piece(player)
 		puts @game_board.draw_board
-		request_save
     #only need to input once? for check save.. exit.. at each step...
 
     return unless @game_over == true
@@ -36,16 +44,16 @@ class Game
     @winner = player.name
   end
 
-  def turn(player)
-    @game_board.move_piece(player)
-		puts @game_board.draw_board
-		request_save
-    # check_if_win
+  # def turn(player)
+  #   @game_board.move_piece(player)
+	# 	puts @game_board.draw_board
+	# 	request_save
+  #   # check_if_win
 
-    return unless @game_over == true
+  #   return unless @game_over == true
 
-    @winner = player.name
-  end
+  #   @winner = player.name
+  # end
 
   def play_game(game_board = @game_board)
     puts @game_board.draw_board
