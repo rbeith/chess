@@ -3,7 +3,7 @@ require_relative 'save_game'
 class Game
 	include Save_Game
 
-  attr_reader :game_board, :white, :black, :gameover
+  attr_reader :game_board, :white, :black, :gameover, :current_player
 
   def initialize(game_board = Board.new(ChessBoard.new.piece), player1 = Player.new('White'), player2 = Player.new('Black'))
     @game_board = game_board
@@ -20,49 +20,50 @@ class Game
     puts "#{@winner} wins!"
   end
 
-	def get_input(player_selection)
-		puts "Enter 'save' to save game or 'exit' to quit."
-		p input = player_selection
-		if input == 'save'
-			save_game
-		elsif input == 'exit'
-			exit
-		else 
-			input
-		end
+	def message
+		puts "Select space. Enter column then row eg. 'b1'"
 	end
 
-	def turn(player)
-		get_input(player.select_piece)
-		get_input(player.select_space)
-    @game_board.move_piece(player)
+	def save_or_quit(choice)
+		if choice == 'save'
+			save_game
+			get_input
+		elsif choice == 'quit'
+			exit
+		else 
+			choice
+		end
+	end
+	
+	def get_input
+		puts "#{@current_player.name}, select a piece to move; enter column then row. eg: 'b1'"
+		puts "Or enter 'save' or 'quit'"
+		save_or_quit(@current_player.select_piece)
+		@current_player.translate_piece_selection
+		save_or_quit(@current_player.select_space)
+		@current_player.translate_space_selection		
+	end
+
+	def turn
+		get_input
+    @game_board.move_piece(@current_player)
 		puts @game_board.draw_board
-    #only need to input once? for check save.. exit.. at each step...
 
     return unless @game_over == true
 
-    @winner = player.name
+    @winner = @current_player.name
   end
-
-  # def turn(player)
-  #   @game_board.move_piece(player)
-	# 	puts @game_board.draw_board
-	# 	request_save
-  #   # check_if_win
-
-  #   return unless @game_over == true
-
-  #   @winner = player.name
-  # end
 
   def play_game(game_board = @game_board)
     puts @game_board.draw_board
     until @game_over == true
-      turn(@player1)
+      @current_player = @player1
+			turn
 
       break if @game_over == true
 
-      turn(@player2)
+      @current_player = @player2
+			turn
     end
     declare_winner
   end
