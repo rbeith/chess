@@ -34,7 +34,7 @@ module Save_Game
 																																											BlackRook])
       game.play_game
 		else 
-			play_game		
+			play_game	
     end
   end
 
