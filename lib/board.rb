@@ -27,31 +27,13 @@ class Board
 		  ---------------------------------
     BOARD
   end
-
-	# def select_start(player)
-	# 	player.select_piece
-	# end
-
-	# def select_end(player)
-	# 	player.select_space
-	# end
 	
-	def move_piece(player)
-		start_space = [player.input[0], player.input[1]]
-	    end_space = [player.input[2], player.input[3]]
-		start_piece = @board[start_space[0]][start_space[1]]
-		verify_input(player, start_piece, end_space, start_space)
-		assign_new_space(end_space, start_space)
-		assign_empty_space(start_space)
+	def move_piece(player, piece = player.piece, space = player.space)
+		start_piece = @board[piece[0]][piece[1]]
+		verify_input(player, start_piece, space, piece)
+		assign_new_space(space, piece)
+		assign_empty_space(piece)
 	end
-	
-	# def start_space(player)
-		
-	# end
-
-	# def end_space(player)
-		
-	# end
 
 	def verify_input(player, start_piece, end_space, start_space)
 		until start_piece.forbidden?(start_space, end_space, board) == false
