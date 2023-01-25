@@ -15,7 +15,7 @@ class Player
   def select_space
     puts 'Select the space to move your piece to'
 		space = gets.chomp
-    @input = board_location(space)
+    @input += board_location(space)
   end
 
   def letter_to_row(input)

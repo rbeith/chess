@@ -37,8 +37,8 @@ class Board
 	# end
 	
 	def move_piece(player)
-		start_space = player.input[0]
-	  end_space = player.input[1]
+		start_space = [player.input[0], player.input[1]]
+	    end_space = [player.input[2], player.input[3]]
 		start_piece = @board[start_space[0]][start_space[1]]
 		verify_input(player, start_piece, end_space, start_space)
 		assign_new_space(end_space, start_space)
@@ -57,16 +57,17 @@ class Board
 		until start_piece.forbidden?(start_space, end_space, board) == false
 			##move this to another class? player?
 			puts "Illegal move, choose space again or type 'cancel' to choose another piece"
-			turn(player) if gets.chomp == 'cancel'
+			input = gets.chomp
+			move_piece(player) if input == 'cancel'
 		end
 	end
 
-  def assign_new_space(end_space, start_space)
-    @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
-  end
+	def assign_new_space(end_space, start_space)
+		@board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
+	end
 
-  def assign_empty_space(start_space)
-    @board[start_space[0]][start_space[1]] = @empty_space
-  end
+	def assign_empty_space(start_space)
+		@board[start_space[0]][start_space[1]] = @empty_space
+	end
 
 end

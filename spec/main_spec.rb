@@ -18,8 +18,8 @@ describe Game do
 
   describe '#move_piece' do
     it 'moves a game piece to a new space' do
-      allow(player1).to receive(:select_piece).and_return([1, 0])
-      allow(player1).to receive(:select_space).and_return([2, 0])
+      allow(player1).to receive(:input).and_return([1, 0, 2, 0])
+      # allow(player1).to receive(:input).and_return([2, 0])
       movement.game_board.move_piece(player1)
       expect(movement.game_board.board[2][0].sign).to eq('♙')
     end
@@ -29,8 +29,8 @@ describe Game do
     it 'changes space to self when it takes another piece' do
 			piece = BlackPawn.new
       movement.game_board.board[3][1] = piece
-      allow(player2).to receive(:select_piece).and_return([3, 1])
-      allow(player2).to receive(:select_space).and_return([2, 0])
+      allow(player2).to receive(:input).and_return([3, 1, 2, 0])
+      # allow(player2).to receive(:select_space).and_return([2, 0])
 			allow(piece).to receive(:forbidden?).and_return(false)
       movement.game_board.move_piece(player2)
       expect(movement.game_board.board[2][0].sign).to eq('♟︎')
@@ -44,15 +44,15 @@ describe Board do
 
   describe '#move_piece' do
     it 'moves a game piece to a new space' do
-      allow(player1).to receive(:select_piece).and_return([1, 0])
-      allow(player1).to receive(:select_space).and_return([2, 0])
+      allow(player1).to receive(:input).and_return([1, 0, 2, 0])
+      # allow(player1).to receive(:select_space).and_return([2, 0])
       movement.move_piece(player1)
       expect(movement.board[2][0].sign).to eq('♙')
     end
 
     it 'resets the previous space' do
-      allow(player1).to receive(:select_piece).and_return([1, 0])
-      allow(player1).to receive(:select_space).and_return([2, 0])
+      # allow(player1).to receive(:select_piece).and_return([1, 0])
+      allow(player1).to receive(:input).and_return([1, 0, 2, 0])
       movement.move_piece(player1)
       expect(movement.board[1][0].sign).to eq(' ')
     end
@@ -85,6 +85,8 @@ describe Player do
     subject(:space) { described_class.new }
 
     it 'allows user to select space and returns board coordinates' do
+      allow(space).to receive(:gets).and_return('a1')
+      space.select_piece
       allow(space).to receive(:gets).and_return('b1')
       space.select_space
       expect(space.board_location).to eq([1, 0])
