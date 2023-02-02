@@ -5,7 +5,9 @@ class Game
 
   attr_reader :game_board, :white, :black, :gameover, :current_player
 
-  def initialize(game_board = Board.new(ChessBoard.new.piece), player1 = Player.new('White'), player2 = Player.new('Black'))
+  def initialize(game_board: Board.new, 
+								player1: Player.new(name: 'White'), 
+								player2: Player.new(name: 'Black'))
     @game_board = game_board
     @player1 = player1
     @player2 = player2
@@ -38,24 +40,39 @@ class Game
 	def get_input
 		puts "#{@current_player.name}, select a piece to move; enter column then row. eg: 'b1'"
 		puts "Or enter 'save' or 'quit'"
-		save_or_quit(@current_player.select_piece)
+		save_or_quit(select_piece)
 		@current_player.translate_piece_selection
-		save_or_quit(@current_player.select_space)
+		save_or_quit(select_space)
 		@current_player.translate_space_selection		
+	end
+
+	def select_piece
+		@current_player.select_piece
+	end
+
+	def select_space
+		@current_player.select_space
+	end
+
+	def draw_board
+		@game_board.draw_board
 	end
 
 	def turn
 		get_input
     @game_board.move_piece(@current_player)
-		puts @game_board.draw_board
+		puts draw_board
 
     return unless @game_over == true
-
-    @winner = @current_player.name
+		winner
   end
+	
+	def winner
+		@winner = @current_player.name
+	end
 
   def play_game(game_board = @game_board)
-    puts @game_board.draw_board
+    puts draw_board
     until @game_over == true
       @current_player = @player1
 			turn

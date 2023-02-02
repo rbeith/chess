@@ -1,8 +1,10 @@
 class BlackPawn < Piece
-  attr_reader :sign
+  attr_reader :sign, :color
 
-  def initialize(sign = '♟︎')
+  def initialize(sign: '♟︎', position: [nil])
     @sign = sign
+		@color = 'black'
+		@position = position
   end
 
   def conditions(board, start_row, start_column, end_row, end_column)

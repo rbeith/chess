@@ -1,0 +1,185 @@
+--- !ruby/object:Game
+game_board: !ruby/object:Board
+  board:
+  - - !ruby/object:WhiteRook
+      sign: "♖"
+    - !ruby/object:WhiteBishop
+      sign: "♗"
+    - !ruby/object:WhiteKnight
+      sign: "♘"
+      moves:
+      - - 2
+        - 2
+        - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+      - - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+        - 2
+        - 2
+    - !ruby/object:WhiteQueen
+      sign: "♕"
+    - !ruby/object:WhiteKing
+      sign: "♔"
+    - !ruby/object:WhiteKnight
+      sign: "♘"
+      moves:
+      - - 2
+        - 2
+        - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+      - - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+        - 2
+        - 2
+    - !ruby/object:WhiteBishop
+      sign: "♗"
+    - !ruby/object:WhiteRook
+      sign: "♖"
+  - - &5 !ruby/object:Piece
+      sign: " "
+    - !ruby/object:WhitePawn
+      sign: "♙"
+    - !ruby/object:WhitePawn
+      sign: "♙"
+    - !ruby/object:WhitePawn
+      sign: "♙"
+    - !ruby/object:WhitePawn
+      sign: "♙"
+    - !ruby/object:WhitePawn
+      sign: "♙"
+    - !ruby/object:WhitePawn
+      sign: "♙"
+    - !ruby/object:WhitePawn
+      sign: "♙"
+  - - &1 !ruby/object:Piece
+      sign: " "
+    - *1
+    - *1
+    - *1
+    - *1
+    - *1
+    - *1
+    - *1
+  - - !ruby/object:WhitePawn
+      sign: "♙"
+    - &2 !ruby/object:Piece
+      sign: " "
+    - *2
+    - *2
+    - *2
+    - *2
+    - *2
+    - *2
+  - - &3 !ruby/object:Piece
+      sign: " "
+    - *3
+    - *3
+    - *3
+    - *3
+    - *3
+    - *3
+    - *3
+  - - &4 !ruby/object:Piece
+      sign: " "
+    - *4
+    - *4
+    - *4
+    - *4
+    - *4
+    - *4
+    - *4
+  - - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+    - !ruby/object:BlackPawn
+      sign: "♟︎"
+  - - !ruby/object:BlackRook
+      sign: "♜"
+    - !ruby/object:BlackBishop
+      sign: "♝"
+    - !ruby/object:BlackKnight
+      sign: "♞"
+      moves:
+      - - 2
+        - 2
+        - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+      - - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+        - 2
+        - 2
+    - !ruby/object:BlackQueen
+      sign: "♛"
+    - !ruby/object:BlackKing
+      sign: "♚"
+    - !ruby/object:BlackKnight
+      sign: "♞"
+      moves:
+      - - 2
+        - 2
+        - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+      - - 1
+        - -1
+        - -2
+        - -2
+        - -1
+        - 1
+        - 2
+        - 2
+    - !ruby/object:BlackBishop
+      sign: "♝"
+    - !ruby/object:BlackRook
+      sign: "♜"
+  empty_space: *5
+player1: !ruby/object:Player
+  name: White
+  piece:
+  - 1
+  - 0
+  space:
+  - 3
+  - 0
+player2: !ruby/object:Player
+  name: Black
+  piece: save
+gameover: false

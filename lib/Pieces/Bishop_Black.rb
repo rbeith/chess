@@ -6,8 +6,9 @@ class BlackBishop < Piece
 
   attr_reader :sign, :moves
 
-  def initialize(sign = '♝')
+  def initialize(sign: '♝', position: [nil])
     @sign = sign
-    @moves
+		@color = 'black'
+		@position = position
   end
 end

@@ -1,9 +1,15 @@
-class Board
-  attr_accessor :board
+require_relative 'ChessBoard'
 
-  def initialize(board, empty_space = Piece.new)
-    @board = board
+class Board
+	include ChessBoard
+
+  attr_accessor :board
+	attr_reader :white_king, :black_king, :piece
+
+  def initialize(empty_space: Piece.new)
+    @board = new_board
     @empty_space = empty_space
+    place_pieces
   end
 
   def draw_board
@@ -31,12 +37,13 @@ class Board
 	def move_piece(player, piece = player.piece, space = player.space)
 		start_piece = @board[piece[0]][piece[1]]
 		verify_input(player, start_piece, space, piece)
+		start_piece.update_position(space[0], space[1])
 		assign_new_space(space, piece)
 		assign_empty_space(piece)
 	end
 
 	def verify_input(player, start_piece, end_space, start_space)
-		until start_piece.forbidden?(start_space, end_space, board) == false
+		until start_piece.forbidden?(start_space, end_space, self) == false
 			##move this to another class? player?
 			puts "Illegal move, choose space again or type 'cancel' to choose another piece"
 			input = gets.chomp

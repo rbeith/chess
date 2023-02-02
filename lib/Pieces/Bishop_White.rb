@@ -4,10 +4,9 @@ require_relative 'Bishop_moves'
 class WhiteBishop < Piece
   include Bishopmoves
 
-  attr_reader :sign, :moves
-
-  def initialize(sign = '♗')
+  def initialize(sign: '♗', position: [nil])
     @sign = sign
-    @moves
+		@color = 'white'
+		@position = position
   end
 end

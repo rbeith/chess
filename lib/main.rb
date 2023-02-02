@@ -5,4 +5,4 @@ require_relative 'ChessBoard'
 require 'yaml'
 Dir['./lib/Pieces/*'].each { |file| require file }
 
-Game.new.load_game
+# Game.new.load_game

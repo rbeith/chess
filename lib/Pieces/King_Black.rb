@@ -5,8 +5,10 @@ class BlackKing < Piece
 
   attr_reader :sign
 
-  def initialize(sign = '♚')
+  def initialize(sign: '♚', position: [nil])
     @sign = sign
     @moves
+		@position = [7, 4]
+		@color = 'black'
   end
 end

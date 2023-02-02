@@ -3,10 +3,9 @@ require_relative 'Rook_moves'
 class WhiteRook < Piece
   include Rookmoves
 
-  attr_reader :sign
-
-  def initialize(sign = '♖')
+  def initialize(sign: '♖', position: [nil])
     @sign = sign
-    @moves
+		@color = 'black'
+		@position = position
   end
 end
