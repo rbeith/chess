@@ -1,9 +1,9 @@
-require_relative 'ChessBoard'
+require_relative 'chess_board'
 
 class Board
 	include ChessBoard
 
-  attr_accessor :board
+    attr_accessor :board
 	attr_reader :white_king, :black_king, :piece
 
   def initialize(empty_space: Piece.new)
@@ -49,6 +49,7 @@ class Board
 			input = gets.chomp
 			move_piece(player) if input == 'cancel'
 		end
+		check?(start_piece)
 	end
 
 	def assign_new_space(end_space, start_space)
@@ -59,4 +60,35 @@ class Board
 		@board[start_space[0]][start_space[1]] = @empty_space
 	end
 
+	def check?(piece)
+		# what about other pieces who could check after another piece moved?
+		#    Ex. a Rook moves to let a queen put king in check??
+		#    if king moves into check?
+		# Every piece checks for check every move?
+		# check if opposite king's position if forbidden?
+		king = if piece.color == 'white'
+			@black_king
+		else
+			@white_king
+		end
+		@board.each do |row|
+		  row.each do |game_piece|
+			if game_piece.color == king.color &&
+			   game_piece.conditions(@board, game_piece.position[0], game_piece.position[1], king.position[0],
+									 king.position[1]) == false
+			  puts "#{king.color.upcase}, Check"
+			  return true
+			end
+		  end
+		  false
+		end
+		# if any possible next move results in check_mate?
+		# Player in check must move king out of check
+	end
+	
+	def check_mate?(space)
+	# if no move can keep king from being captured...
+	puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
+	# Game.end_game
+	end
 end

@@ -21,41 +21,6 @@ class Piece
     @position = [row, col]
   end
 
-  def check?(piece, board)
-    # what about other pieces who could check after another piece moved?
-    #    Ex. a Rook moves to let a queen put king in check??
-    #    if king moves into check?
-    # Every piece checks for check every move?
-    # check if opposite king's position if forbidden?
-    piece = board[piece[0]][piece[1]]
-    king = if piece.color == 'white'
-             board.black_king
-           # need a variable? to keep track of king instances? instancevariable?
-           else
-             board.white_king
-           end
-    # need more tests -- true if false???
-    board.piece.each do |row|
-      row.each do |game_piece|
-        p game_piece
-        if game_piece.color == king.color &&
-           game_piece.conditions(board, game_piece.position[0], game_piece.position[1], king.position[0],
-                                 king.position[1]) == false
-          # need board.piece?
-          return puts "#{king.color}, Check"
-        end
-      end
-    end
-    # if any possible next move results in check_mate?
-    # Player in check must move king out of check
-  end
-
-  def check_mate?(space)
-    # if no move can keep king from being captured...
-    puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
-    # Game.end_game
-  end
-
   def on_board?(row, col)
     true if row.between?(0, 7) && col.between?(0, 7)
   end
@@ -69,28 +34,87 @@ class Piece
     return true if on_board?(end_row, end_column) == false
     return true if conditions(game_board, start_row, start_column, end_row, end_column) == true
     return true if path_empty?(from, to, direction(from, to), game_board) == false
-
-    # return false if check?(to, game_board) == true -- somewhere else...
+    # return true if check?(game_board[from[0]][to[0]], game_board) == true
     false
   end
 
+  def path_empty?(position, destination, direction, board)
+    row = position[0]
+    col = position[1]
+    case direction
+    when :up
+      (row - 1..destination[0]).each do |i|
+        return false if board[i][col].sign != ' '
+      end
+    when :down
+      (row + 1..destination[0]).each do |i|
+        return false if board[i][col].sign != ' '
+      end
+    when :left
+      (col - 1..destination[1]).each do |j|
+        return false if board[row][j].sign != ' '
+      end
+    when :right
+      (col + 1..destination[1]).each do |j|
+        return false if board[row][j].sign != ' '
+      end
+    when :up_left
+      i = row - 1
+      j = col - 1
+      while i <= destination[0] && j <= destination[1]
+        return false if board[i][j].sign != ' '
+  
+        i -= 1
+        j -= 1
+      end
+    when :up_right
+      i = row - 1
+      j = col + 1
+      while i <= destination[0] && j >= destination[1]
+        return false if board[i][j].sign != ' '
+  
+        i -= 1
+        j += 1
+      end
+    when :down_left
+      i = row + 1
+      j = col - 1
+      while i < destination[0] && j >= destination[1]
+        return false if board[i][j].sign != ' '
+  
+        i += 1
+        j -= 1
+      end
+    when :down_right
+      i = row + 1
+      j = col + 1
+      while i < destination[0] && j < destination[1]
+        return false if board[i][j].sign != ' '
+  
+        i += 1
+        j += 1
+      end
+    end
+    true
+  end
+
   def direction(current_position, destination)
-    if destination[0] > current_position[0]
+    if destination[0] > current_position[0] && destination[1] == current_position[1]
       :down
-    elsif destination[0] < current_position[0]
+    elsif destination[0] < current_position[0] && destination[1] == current_position[1]
       :up
-    elsif destination[1] > current_position[1]
+    elsif destination[1] > current_position[1] && destination[0] == current_position[0]
       :right
-    elsif destination[1] < current_position[1]
+    elsif destination[1] < current_position[1] && destination[0] == current_position[0]
       :left
+    elsif destination[0] > current_position[0] && destination[1] > current_position[1]
+      :down_right
+    elsif destination[0] > current_position[0] && destination[1] < current_position[1]
+      :up_right
+    elsif destination[0] < current_position[0] && destination[1] > current_position[1]
+      :down_left
     elsif destination[0] < current_position[0] && destination[1] < current_position[1]
       :up_left
-    elsif destination[0] > current_position[0] && destination[1] > current_position[1]
-      :up_right
-    elsif destination[0] > current_position[0] && destination[1] < current_position[1]
-      :down_left
-    elsif destination[0] < current_position[0] && destination[1] > current_position[1]
-      :down_right
     end
   end
 end

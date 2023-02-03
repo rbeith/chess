@@ -9,49 +9,4 @@ module Bishopmoves
 			true
     end
   end
-
-	def path_empty?(position, destination, direction, board)
-    row = position[0]
-    col = position[1]
-    case direction
-    when :up_left
-      i = row - 1
-      j = col - 1
-      while i <= destination[0] && j <= destination[1]
-        return false if board[i][j].sign != ' '
-
-        i -= 1
-        j -= 1
-      end
-    when :up_right
-      i = row - 1
-      j = col + 1
-      while i <= destination[0] && j >= destination[1]
-        return false if board[i][j].sign != ' '
-
-        i -= 1
-        j += 1
-      end
-    when :down_left
-      i = row + 1
-      j = col - 1
-      while i < destination[0] && j >= destination[1]
-        return false if board[i][j].sign != ' '
-
-        i += 1
-        j -= 1
-      end
-    when :down_right
-      i = row + 1
-      j = col + 1
-      while i < destination[0] && j < destination[1]
-        return false if board[i][j].sign != ' '
-
-        i += 1
-        j += 1
-      end
-    end
-    true
-  end
-
 end

@@ -1,69 +1,77 @@
 require_relative '../lib/main'
 
-# describe Node do
-# 	subject(:step_finder) { described_class.new }
-# 	let(:knight) {instance_double('knight')}
-# 	describe '#knight_moves' do
-# 		xit 'prints knights moves when given starting position' do
-# 			possible_moves([3, 3], [4, 3], knight.moves)
-# 			expect(possible_moves([3, 3], [4, 3], knight.moves)).to eq([[3,3],[4,5],[2,4],[4,3]])
-# 		end
-# 	end
-# end
-
 describe Game do
+  subject(:movement) { described_class.new }
+  let(:player1) { instance_double('player1') }
+  
+end
+
+describe Board do
   subject(:movement) { described_class.new }
   let(:player1) { instance_double('player1') }
   let(:player2) { instance_double('player2') }
 
   describe '#move_piece' do
-    xit 'moves a game piece to a new space' do
-      allow(player1).to receive(:piece).and_return([1, 0])
-			allow(player1).to receive(:space).and_return([2, 0])
-      # allow(player1).to receive(:input).and_return([2, 0])
-      movement.game_board.move_piece(player1)
-      expect(movement.game_board.board[2][0].sign).to eq('♙')
+    context 'When a player moves a piece' do
+
+      it 'moves a game piece to a new space' do
+        allow(player1).to receive(:piece).and_return([1, 0])
+        allow(player1).to receive(:space).and_return([2, 0])
+        allow(movement.board[1][0]).to receive(:forbidden?).and_return(false)
+        movement.move_piece(player1)
+        expect(movement.board[2][0].sign).to eq('♙')
+      end
+
+      it 'resets the previous space' do
+        allow(player1).to receive(:piece).and_return([1, 0])
+        allow(player1).to receive(:space).and_return([2, 0])
+        allow(movement.board[1][0]).to receive(:forbidden?).and_return(false)
+        movement.move_piece(player1)
+        expect(movement.board[1][0].sign).to eq(' ')
+      end
+
+      it 'updates #position of piece' do
+        allow(player1).to receive(:piece).and_return([1, 0])
+        allow(player1).to receive(:space).and_return([2, 0])
+        allow(movement.board[1][0]).to receive(:forbidden?).and_return(false)
+        movement.move_piece(player1)
+        expect(movement.board[2][0].position).to eq([2, 0])
+      end
     end
   end
 
   describe '#kill_piece' do
     it 'changes space to self when it takes another piece' do
-			piece = BlackPawn.new
-      movement.game_board.board[3][1] = piece
+      piece = BlackPawn.new
+      movement.board[3][1] = piece
       allow(player2).to receive(:piece).and_return([3, 1])
       allow(player2).to receive(:space).and_return([2, 0])
-			allow(piece).to receive(:forbidden?).and_return(false)
-      movement.game_board.move_piece(player2)
-      expect(movement.game_board.board[2][0].sign).to eq('♟︎')
+      allow(piece).to receive(:forbidden?).and_return(false)
+      movement.move_piece(player2)
+      expect(movement.board[2][0].sign).to eq('♟︎')
     end
   end
-end
 
-describe Board do
-  subject(:movement) { described_class.new(board: ChessBoard.new.piece) }
-  let(:player1) { instance_double('player1') }
-
-  describe '#move_piece' do
-    xit 'moves a game piece to a new space' do
-      allow(player1).to receive(:piece).and_return([1, 0])
-      allow(player1).to receive(:space).and_return([2, 0])
-      movement.move_piece(player1)
-      expect(movement.board[2][0].sign).to eq('♙')
+  context "when a piece is in check" do
+    subject(:check) { described_class.new }
+  
+      describe '#check' do
+        it 'declares check when next move can be to king space' do 
+          board = Board.new
+          pawn = BlackPawn.new
+          board.board[1][5] = pawn
+          pawn.update_position(1, 5)
+          expect(check.check?(pawn)).to be true
+        end
+      end
+  
+      describe "#checkmate?" do
+        it 'declares checkmate when piece can move to king space' do
+          space = BlackKing.new
+          expect{ check.check_mate?(space) }.to output{ "Checkmate" }.to_stdout
+        end
+      end
     end
-
-    xit 'resets the previous space' do
-      allow(player1).to receive(:piece).and_return([1, 0])
-      allow(player1).to receive(:space).and_return([2, 0])
-      movement.move_piece(player1)
-      expect(movement.board[1][0].sign).to eq(' ')
-    end
-
-		xit 'updates #position of piece' do
-			movement.move_piece(player1, [1, 0], [2, 0])
-			expect(movement.board[2][0].position).to eq([2, 0])
-		end
-  end
-
 end
 
 describe Player do
@@ -107,19 +115,19 @@ describe WhitePawn do
   describe '#forbidden?' do
 		board = Array.new(5) { Array.new(4, Piece.new) }
 
-    xit 'forbids illegal move' do
+    it 'forbids illegal move' do
       from = [1, 0]
       to = [4, 0]
       expect(check_forbidden.forbidden?(from, to, board)).to be true
     end
 
-    xit 'allows legal move' do
+    it 'allows legal move' do
       from = [1, 0]
       to = [2, 0]
       expect(check_forbidden.forbidden?(from, to, board)).to be false
     end
 
-    xit 'allows pawn to attack diagonally' do
+    it 'allows pawn to attack diagonally' do
 			from = [1, 0]
 			board[2][1] = BlackPawn.new
 			board[2][1]
@@ -127,7 +135,7 @@ describe WhitePawn do
       expect(check_forbidden.forbidden?(from, to, board)).to be false
     end
 
-    xit 'forbids diagonal attack if space empty' do
+    it 'forbids diagonal attack if space empty' do
       from = [2, 1]
       to = [3, 2]
       expect(check_forbidden.forbidden?(from, to, board)).to be true
@@ -138,7 +146,7 @@ end
 describe WhiteKing do
   subject(:king) { described_class.new }
 
-  xit 'cannot move when there is a piece in front of it' do
+  it 'cannot move when there is a piece in front of it' do
     from = [0, 1]
     to = [1, 1]
     board = [[0, 1, 2], [0, WhitePawn.new, 2]]
@@ -164,7 +172,6 @@ describe WhiteBishop do
 		board = Array.new(4) { Array.new(4, Piece.new) }
 
 			it 'can move along a diagonal' do
-				allow(diagonal).to receive(:check?).and_return(false)
 				from = [0, 0]
 				to = [3, 3]
 				expect(diagonal.forbidden?(from, to, board)).to be false
@@ -201,7 +208,7 @@ describe WhiteBishop do
 			to = [3, 3]
 			board[2][2] = WhitePawn.new
 			direction = blocked.direction(from, to)
-			expect(blocked.path_empty?(from, to, direction, board)).to be true
+			expect(blocked.path_empty?(from, to, direction, board)).to be false
 		end
 	end
 
@@ -211,58 +218,59 @@ describe WhiteQueen do
   subject(:queen) { described_class.new }
   board = Array.new(4) { Array.new(4, Piece.new) }
 
-	# describe '#forbidden' do 
-	# 	it 'can move straight down a column' do
-	# 		from = [0, 0]
-	# 		to = [3, 0]
-	# 		expect(queen.forbidden?(from, to, board)).to be false
-	# 	end
+	describe '#forbidden' do 
+		it 'can move straight down a column' do
+			from = [0, 0]
+			to = [3, 0]
+			expect(queen.forbidden?(from, to, board)).to be false
+		end
 
-	# 	it 'can move along a row' do
-	# 		from = [0, 0]
-	# 		to = [0, 3]
-	# 		expect(queen.forbidden?(from, to, board)).to be false
-	# 	end
+		it 'can move along a row' do
+			from = [0, 0]
+			to = [0, 3]
+			expect(queen.forbidden?(from, to, board)).to be false
+		end
 
-	# 	it 'can move along a diagonal' do
-	# 		from = [0, 0]
-	# 		to = [3, 3]
-	# 		expect(queen.forbidden?(from, to, board)).to be false
-	# 	end
-	# end
+		it 'can move along a diagonal' do
+      empty_board = Array.new(4) { Array.new(4, Piece.new) }
+			from = [0, 0]
+			to = [3, 3]
+			expect(queen.forbidden?(from, to, empty_board)).to be false
+		end
+	end
 
 	 describe '#path_empty?' do 
-	# 	context 'When checking a path for blocking pieces' do
+		context 'When checking a path for blocking pieces' do
 			
-	# 		it 'can move in a straight line when there are no pieces in path' do
-	# 			expect(queen.path_empty?([0, 3], [3, 3], :down, board)).to be true
-	# 		end
+			it 'can move in a straight line when there are no pieces in path' do
+				expect(queen.path_empty?([0, 3], [3, 3], :down, board)).to be true
+			end
 
-	# 		it 'cannot move when a piece is blocking' do
-	# 			board[2][3] = WhitePawn.new
-	# 			expect(queen.path_empty?([0, 3], [3, 3], :down, board)).to be false
-	# 		end
+			it 'cannot move when a piece is blocking' do
+				board[2][3] = WhitePawn.new
+				expect(queen.path_empty?([0, 3], [3, 3], :down, board)).to be false
+			end
 
-	# 		it 'can move up' do
-	# 			expect(queen.path_empty?([3,3], [0,3], :up, board)).to be true
-	# 		end
+			it 'can move up' do
+				expect(queen.path_empty?([3,3], [0,3], :up, board)).to be true
+			end
 		
-	# 		it 'can move up_left' do
-	# 			expect(queen.path_empty?([3,3], [0,0], :up_left, board)).to be true
-	# 		end
+			it 'can move up_left' do
+				expect(queen.path_empty?([3,3], [0,0], :up_left, board)).to be true
+			end
 
-	# 		it 'can move up_right' do
-	# 			expect(queen.path_empty?([3,0], [0,3], :up_right, board)).to be true
-	# 		end
+			it 'can move up_right' do
+				expect(queen.path_empty?([3,0], [0,3], :up_right, board)).to be true
+			end
 			
-	# 		it 'can move down_right' do
-	# 			expect(queen.path_empty?([0,3], [3,0], :down_right, board)).to be true
-	# 		end
+			it 'can move down_right' do
+				expect(queen.path_empty?([0,3], [3,0], :down_right, board)).to be true
+			end
 
-	# 		it 'can move down_left' do
-	# 			expect(queen.path_empty?([0,3], [3,3], :down_left, board)).to be true
-	# 		end
-	# 	end
+			it 'can move down_left' do
+				expect(queen.path_empty?([0,3], [3,3], :down_left, board)).to be true
+			end
+		end
 
 		context 'When a piece is blocking the path' do
 			subject(:blocked) { described_class.new }
@@ -275,12 +283,11 @@ describe WhiteQueen do
 					expect(blocked.forbidden?(from, to, board)).to be true
 				end
 
-				it '#path_empty? returns true?????' do
+				it '#path_empty? returns true' do
 					from = [0, 0]
 					to = [3, 3]
-					p direction = blocked.direction(from, to)
-					# direction should be :down_left?
-					expect(blocked.path_empty?(from, to, direction, board)).to be true
+					direction = blocked.direction(from, to)
+					expect(blocked.path_empty?(from, to, direction, board)).to be false
 				end
 	
 			end
@@ -348,25 +355,5 @@ describe WhiteRook do
 end
 
 describe Piece do
-	context "when a piece is in check" do
-	subject(:check) { described_class.new }
-
-		describe '#check' do
-			xit 'declares check when next move can be to king space' do 
-				board = Board.new
-				pawn = BlackPawn.new
-				board.board[1][5] = pawn
-				pawn.update_position(1, 5)
-				expect(check.check?(pawn, board)).to be true
-			end
-		end
-
-		describe "#checkmate?" do
-			xit 'declares checkmate when piece can move to king space' do
-				space = BlackKing.new
-				expect{ check.check_mate?(space) }.to output{ "Checkmate" }.to_stdout
-			end
-		end
-	end
 
 end

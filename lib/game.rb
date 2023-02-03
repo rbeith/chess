@@ -36,7 +36,7 @@ class Game
 			choice
 		end
 	end
-	
+
 	def get_input
 		puts "#{@current_player.name}, select a piece to move; enter column then row. eg: 'b1'"
 		puts "Or enter 'save' or 'quit'"
@@ -60,13 +60,13 @@ class Game
 
 	def turn
 		get_input
-    @game_board.move_piece(@current_player)
+		@game_board.move_piece(@current_player)
 		puts draw_board
 
-    return unless @game_over == true
+		return unless @game_over == true
 		winner
-  end
-	
+	end
+
 	def winner
 		@winner = @current_player.name
 	end

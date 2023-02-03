@@ -1,10 +1,8 @@
 require './lib/Pieces/piece'
-require_relative 'Bishop_moves'
+require_relative 'bishop_moves'
 
 class BlackBishop < Piece
   include Bishopmoves
-
-  attr_reader :sign, :moves
 
   def initialize(sign: '♝', position: [nil])
     @sign = sign

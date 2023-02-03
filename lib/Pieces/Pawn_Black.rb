@@ -1,5 +1,4 @@
 class BlackPawn < Piece
-  attr_reader :sign, :color
 
   def initialize(sign: '♟︎', position: [nil])
     @sign = sign

@@ -1,4 +1,4 @@
-require_relative 'Rook_moves'
+require_relative 'rook_moves'
 
 class WhiteRook < Piece
   include Rookmoves

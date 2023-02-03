@@ -1,5 +1,5 @@
 require './lib/Pieces/piece'
-require_relative 'Bishop_moves'
+require_relative 'bishop_moves'
 
 class WhiteBishop < Piece
   include Bishopmoves

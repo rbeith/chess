@@ -1,9 +1,7 @@
-require_relative 'King_moves'
+require_relative 'king_moves'
 
 class WhiteKing < Piece
   include Kingmoves
-
-  attr_reader :sign, :position
 
   def initialize(sign: '♔', position: [nil])
     @sign = sign

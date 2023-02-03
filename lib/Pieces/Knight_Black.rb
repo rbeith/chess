@@ -1,7 +1,8 @@
 require './lib/Pieces/piece'
+require_relative 'knight_moves'
 
 class BlackKnight < Piece
-  attr_reader :sign, :moves
+  include KnightMoves
 
   def initialize(sign: '♞', position: [nil])
     @sign = sign
