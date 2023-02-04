@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require_relative 'chess_board'
 
 class Board
-	include ChessBoard
+  include ChessBoard
 
-    attr_accessor :board
-	attr_reader :white_king, :black_king, :piece
+  attr_accessor :board
+  attr_reader :white_king, :black_king, :piece
 
   def initialize(empty_space: Piece.new)
     @board = new_board
@@ -33,62 +35,162 @@ class Board
 		  ---------------------------------
     BOARD
   end
-	
-	def move_piece(player, piece = player.piece, space = player.space)
-		start_piece = @board[piece[0]][piece[1]]
-		verify_input(player, start_piece, space, piece)
-		start_piece.update_position(space[0], space[1])
-		assign_new_space(space, piece)
-		assign_empty_space(piece)
-	end
 
-	def verify_input(player, start_piece, end_space, start_space)
-		until start_piece.forbidden?(start_space, end_space, self) == false
-			##move this to another class? player?
-			puts "Illegal move, choose space again or type 'cancel' to choose another piece"
-			input = gets.chomp
-			move_piece(player) if input == 'cancel'
-		end
-		check?(start_piece)
-	end
+  def move_piece(player, piece = player.piece, space = player.space)
+    start_piece = @board[piece[0]][piece[1]]
+    verify_input(player, start_piece, space, piece)
+    start_piece.update_position(space[0], space[1])
+    assign_new_space(space, piece)
+    assign_empty_space(piece)
+  end
 
-	def assign_new_space(end_space, start_space)
-		@board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
-	end
+  def verify_input(player, start_piece, end_space, start_space)
+    until forbidden?(start_space, end_space, start_piece) == false
+      # #move this to another class? player?
+      puts "Illegal move, choose space again or type 'cancel' to choose another piece"
+      input = gets.chomp
+      move_piece(player) if input == 'cancel'
+    end
+    check?(start_piece)
+  end
 
-	def assign_empty_space(start_space)
-		@board[start_space[0]][start_space[1]] = @empty_space
-	end
+  def assign_new_space(end_space, start_space)
+    @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
+  end
 
-	def check?(piece)
-		# what about other pieces who could check after another piece moved?
-		#    Ex. a Rook moves to let a queen put king in check??
-		#    if king moves into check?
-		# Every piece checks for check every move?
-		# check if opposite king's position if forbidden?
-		king = if piece.color == 'white'
-			@black_king
-		else
-			@white_king
-		end
-		@board.each do |row|
-		  row.each do |game_piece|
-			if game_piece.color == king.color &&
-			   game_piece.conditions(@board, game_piece.position[0], game_piece.position[1], king.position[0],
-									 king.position[1]) == false
-			  puts "#{king.color.upcase}, Check"
-			  return true
-			end
-		  end
-		  false
-		end
-		# if any possible next move results in check_mate?
-		# Player in check must move king out of check
-	end
-	
-	def check_mate?(space)
-	# if no move can keep king from being captured...
-	puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
-	# Game.end_game
-	end
+  def assign_empty_space(start_space)
+    @board[start_space[0]][start_space[1]] = @empty_space
+  end
+
+  def check?(piece)
+    # what about other pieces who could check after another piece moved?
+    #    Ex. a Rook moves to let a queen put king in check??
+    #    if king moves into check?
+    # Every piece checks for check every move?
+    # check if opposite king's position if forbidden?
+    king = if piece.color == 'white'
+             @black_king
+           else
+             @white_king
+           end
+    @board.each do |row|
+      row.each do |game_piece|
+        if (game_piece.color != king.color &&
+               game_piece.conditions(@board, game_piece.position[0], game_piece.position[1], king.position[0],
+                                     king.position[1]) == false)
+																		 p game_piece
+					puts "#{king.color.upcase}, Check"
+        	return true
+				end
+      end
+      false
+    end
+    # if any possible next move results in check_mate?
+    # Player in check must move king out of check
+  end
+
+  def check_mate?(space)
+    # if no move can keep king from being captured...
+    puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
+    # Game.end_game
+  end
+
+	def on_board?(row, col)
+    true if row.between?(0, 7) && col.between?(0, 7)
+  end
+
+  # checks if any movement is forbidden
+  def forbidden?(from, to, piece)
+    start_row = from[0]
+    start_column = from[1]
+    end_row = to[0]
+    end_column = to[1]
+    return true if on_board?(end_row, end_column) == false
+    return true if piece.conditions(@board, start_row, start_column, end_row, end_column) == true
+    return true if path_empty?(from, to) == false
+
+    false
+  end
+
+  def path_empty?(from, to)
+		direction = direction(from, to)
+    row = from[0]
+    col = from[1]
+    case direction
+    when :up
+			(row - 1).downto(to[0]) do |i|
+				p i
+        return false if @board[i][col].sign != ' '
+      end
+    when :down
+      (row + 1).upto(to[0]) do |i|
+        return false if @board[i][col].sign != ' '
+      end
+    when :left
+      (col - 1).downto(to[1]) do |j|
+        return false if @board[row][j].sign != ' '
+      end
+    when :right
+      (col + 1).upto(to[1]) do |j|
+        return false if @board[row][j].sign != ' '
+      end
+    when :up_left
+      i = row - 1
+      j = col - 1
+      while i <= to[0] && j <= to[1]
+        return false if @board[i][j].sign != ' '
+
+        i -= 1
+        j -= 1
+      end
+    when :up_right
+      i = row - 1
+      j = col + 1
+      while i <= to[0] && j >= to[1]
+        return false if @board[i][j].sign != ' '
+
+        i -= 1
+        j += 1
+      end
+    when :down_left
+      i = row + 1
+      j = col - 1
+      while i < to[0] && j >= to[1]
+        return false if @board[i][j].sign != ' '
+
+        i += 1
+        j -= 1
+      end
+    when :down_right
+      i = row + 1
+      j = col + 1
+      while i < to[0] && j < to[1]
+        return false if @board[i][j].sign != ' '
+
+        i += 1
+        j += 1
+      end
+    end
+    true
+  end
+
+  def direction(from, to)
+    if to[0] > from[0] && to[1] == from[1]
+      :down
+    elsif to[0] < from[0] && to[1] == from[1]
+      :up
+    elsif to[1] > from[1] && to[0] == from[0]
+      :right
+    elsif to[1] < from[1] && to[0] == from[0]
+      :left
+    elsif to[0] > from[0] && to[1] > from[1]
+      :down_right
+    elsif to[0] > from[0] && to[1] < from[1]
+      :down_left
+    elsif to[0] < from[0] && to[1] > from[1]
+      :up_right
+    elsif to[0] < from[0] && to[1] < from[1]
+      :up_left
+    end
+  end
 end
