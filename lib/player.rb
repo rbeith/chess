@@ -1,44 +1,46 @@
+# frozen_string_literal: true
+
 class Player
-	attr_reader :name, :input, :space, :piece
+  attr_reader :name, :input, :space, :piece
 
   def initialize(name: 'player')
     @name = name
   end
 
-	def input(space, piece)
-		@input = @space + @piece
-	end
+  def input(_space, _piece)
+    @input = @space + @piece
+  end
 
-	def piece_row
-		@piece_row = @piece[0]
-	end
+  def piece_row
+    @piece_row = @piece[0]
+  end
 
-	def piece_column
-		@piece_column = @piece[1]
-	end
+  def piece_column
+    @piece_column = @piece[1]
+  end
 
-	def space_row
-		@space_row = @space[0]
-	end
+  def space_row
+    @space_row = @space[0]
+  end
 
-	def space_column
-		@space_column = @space[1]
-	end
+  def space_column
+    @space_column = @space[1]
+  end
 
   def select_piece
     @piece = gets.chomp
-	end
+  end
 
-	def translate_piece_selection	
-		@piece = board_location(piece)
+  def translate_piece_selection
+    @piece = board_location(piece)
   end
 
   def select_space
     puts 'Select the space to move your piece to'
-		@space = gets.chomp
-	end
+    @space = gets.chomp
+  end
 
-	def translate_space_selection
+  def translate_space_selection
     @space = board_location(space)
   end
 

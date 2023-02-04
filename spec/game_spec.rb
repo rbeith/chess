@@ -1,4 +1,6 @@
-Dir['/home/magnus/odinproject/ruby/ruby_projects/chess/lib/*'].each { |file| require file }
+# frozen_string_literal: true
+
+Dir['/home/magnus/odinproject/ruby/ruby_projects/chess/lib/*'].sort.each { |file| require file }
 
 describe Node do
   subject(:step_finder) { described_class.new }
