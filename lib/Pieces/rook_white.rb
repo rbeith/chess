@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'rook_moves'
 
 class WhiteRook < Piece
@@ -5,7 +7,7 @@ class WhiteRook < Piece
 
   def initialize(sign: '♖', position: [nil])
     @sign = sign
-		@color = 'black'
-		@position = position
+    @color = 'black'
+    @position = position
   end
 end

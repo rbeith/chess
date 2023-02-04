@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'king_moves'
 
 class WhiteKing < Piece
@@ -6,8 +8,7 @@ class WhiteKing < Piece
   def initialize(sign: '♔', position: [nil])
     @sign = sign
     @moves
-		@position = [0, 4]
-		@color = 'white'
+    @position = [0, 4]
+    @color = 'white'
   end
-
 end

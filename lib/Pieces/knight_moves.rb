@@ -1,6 +1,7 @@
-module KnightMoves
+# frozen_string_literal: true
 
-    def conditions(_board, start_row, start_column, end_row, end_column)
-        false
-    end
+module KnightMoves
+  def conditions(_board, _start_row, _start_column, _end_row, _end_column)
+    true
+  end
 end

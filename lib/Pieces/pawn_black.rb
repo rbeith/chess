@@ -1,15 +1,16 @@
-class BlackPawn < Piece
+# frozen_string_literal: true
 
+class BlackPawn < Piece
   def initialize(sign: '♟︎', position: [nil])
     @sign = sign
-		@color = 'black'
-		@position = position
+    @color = 'black'
+    @position = position
   end
 
   def conditions(board, start_row, start_column, end_row, end_column)
     if [end_row, end_column] == [start_row - 1, start_column]
       false
-    elsif start_row == 6 && [end_row, end_column] == [start_row - 2, start_column]  
+    elsif start_row == 6 && [end_row, end_column] == [start_row - 2, start_column]
       false
     elsif [end_row,
            end_column] == [start_row - 1,
@@ -19,8 +20,8 @@ class BlackPawn < Piece
            end_column] == [start_row - 1,
                            start_column - 1] && board[end_row][end_column].sign != ' '
       false
-		else 
-			true
+    else
+      true
     end
   end
 
