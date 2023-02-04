@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Player
-  attr_reader :name, :input, :space, :piece
+	attr_accessor :space, :piece
+  attr_reader :name, :input
 
   def initialize(name: 'player')
     @name = name
@@ -36,12 +37,18 @@ class Player
   end
 
   def select_space
-    puts 'Select the space to move your piece to'
     @space = gets.chomp
   end
 
   def translate_space_selection
     @space = board_location(space)
+  end
+
+  def board_location(input = gets.chomp)
+    arr = input.split(//)
+    arr[0] = letter_to_row(arr[0].to_sym)
+    arr[1] = arr[1].to_i - 1
+    arr
   end
 
   def letter_to_row(input)
@@ -58,10 +65,4 @@ class Player
     y_coordinate_hash[input]
   end
 
-  def board_location(input = gets.chomp)
-    arr = input.split(//)
-    arr[0] = letter_to_row(arr[0].to_sym)
-    arr[1] = arr[1].to_i - 1
-    arr
-  end
 end

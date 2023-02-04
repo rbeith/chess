@@ -45,8 +45,12 @@ class Game
     puts "Or enter 'save' or 'quit'"
     save_or_quit(select_piece)
     @current_player.translate_piece_selection
+		puts 'Select the space to move your piece to'
     save_or_quit(select_space)
     @current_player.translate_space_selection
+		if verify_input(@current_player, current_piece, selected_space, selected_piece) == false
+			get_input
+		end
   end
 
   def select_piece
@@ -59,6 +63,35 @@ class Game
 
   def draw_board
     @game_board.draw_board
+  end
+
+	def current_piece
+		@current_piece = @game_board.piece[@current_player.piece[0]][@current_player.piece[1]]
+	end
+
+	def reset_space(space)
+		@current_player.space = space
+	end
+
+	def selected_space
+		@current_player.space
+	end
+
+	def reset_piece(piece)
+		@current_player.piece = piece
+	end
+
+	def selected_piece
+		@current_player.piece
+	end
+
+	def verify_input(player, start_piece, end_space, start_space)
+    if @game_board.forbidden?(start_space, end_space, start_piece) == true
+      puts "\n\nForbidden move, choose again.\n\n\n"
+			false
+		else
+			true
+		end
   end
 
   def turn

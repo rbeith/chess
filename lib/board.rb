@@ -36,26 +36,29 @@ class Board
     BOARD
   end
 
-  def move_piece(player, piece = player.piece, space = player.space)
+  def move_piece(player, piece: player.piece, space: player.space)
     start_piece = @board[piece[0]][piece[1]]
-    verify_input(player, start_piece, space, piece)
+    # verify_input(player, start_piece, space, piece)
     start_piece.update_position(space[0], space[1])
     assign_new_space(space, piece)
     assign_empty_space(piece)
+		check?(start_piece) ##move to game??????
   end
 
-  def verify_input(player, start_piece, end_space, start_space)
-    until forbidden?(start_space, end_space, start_piece) == false
-      # #move this to another class? player?
-      puts "Illegal move, choose space again or type 'cancel' to choose another piece"
-      input = gets.chomp
-      move_piece(player) if input == 'cancel'
-    end
-    check?(start_piece)
-  end
+  # def verify_input(player, start_piece, end_space, start_space)
+  #   until forbidden?(start_space, end_space, start_piece) == false
+  #     puts "Illegal move, choose space again or type 'cancel' to choose another piece"
+  #     input = gets.chomp
+  #     if input == 'cancel'
+	# 			move_piece(player, piece: player.select_piece, space: player.select_space)
+	# 		else
+	# 			move_piece(player, space: input)
+	# 		end
+  #   end
+  # end
 
   def assign_new_space(end_space, start_space)
-    @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
+    p @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
   end
 
   def assign_empty_space(start_space)
