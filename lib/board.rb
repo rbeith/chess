@@ -79,10 +79,10 @@ class Board
     @board.each do |row|
       row.each do |game_piece|
         if (game_piece.color != king.color &&
-               game_piece.conditions(@board, game_piece.position[0], game_piece.position[1], king.position[0],
-                                     king.position[1]) == false)
+               forbidden?([game_piece.position[0], game_piece.position[1]], [king.position[0],
+                                     king.position[1]], game_piece) == false)
 																		 p game_piece
-					puts "#{king.color.upcase}, Check"
+					puts "\n\n#{king.color.upcase}, CHECK\n\n\n"
         	return true
 				end
       end
@@ -94,6 +94,7 @@ class Board
 
   def check_mate?(space)
     # if no move can keep king from being captured...
+		# and king cannot move to a safe space.
     puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
     # Game.end_game
   end
@@ -122,7 +123,6 @@ class Board
     case direction
     when :up
 			(row - 1).downto(to[0]) do |i|
-				p i
         return false if @board[i][col].sign != ' '
       end
     when :down
