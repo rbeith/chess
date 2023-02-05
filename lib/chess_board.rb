@@ -14,14 +14,12 @@ module ChessBoard
 
   def place_pieces
     @piece[0][0] = WhiteRook.new(position: [0, 0])
-    @piece[0][1] = WhiteBishop.new(position: [0, 1])
-    @piece[0][2] = WhiteKnight.new(position: [0, 2])
+    @piece[0][1] = WhiteKnight.new(position: [0, 1])
+    @piece[0][2] = WhiteBishop.new(position: [0, 2])
     @piece[0][3] = WhiteQueen.new(position: [0, 3])
     @piece[0][4] = @white_king = WhiteKing.new(position: [0, 4])
-    #  = @white_king
-    @piece[0][5] = WhiteKnight.new(position: [0, 5])
-    # @piece[0][5].update_position(0, 5)
-    @piece[0][6] = WhiteBishop.new(position: [0, 6])
+    @piece[0][5] = WhiteBishop.new(position: [0, 5])
+    @piece[0][6] = WhiteKnight.new(position: [0, 6])
     @piece[0][7] = WhiteRook.new(position: [0, 7])
     @piece[1][0] = WhitePawn.new(position: [1, 0])
     @piece[1][1] = WhitePawn.new(position: [1, 1])
@@ -40,13 +38,12 @@ module ChessBoard
     @piece[6][6] = BlackPawn.new(position: [6, 6])
     @piece[6][7] = BlackPawn.new(position: [6, 7])
     @piece[7][0] = BlackRook.new(position: [7, 0])
-    @piece[7][1] = BlackBishop.new(position: [7, 1])
-    @piece[7][2] = BlackKnight.new(position: [7, 2])
+    @piece[7][1] = BlackKnight.new(position: [7, 1])
+    @piece[7][2] = BlackBishop.new(position: [7, 2])
     @piece[7][3] = BlackQueen.new(position: [7, 3])
     @piece[7][4] = @black_king = BlackKing.new(position: [7, 4])
-    # @black_king
-    @piece[7][5] = BlackKnight.new(position: [7, 5])
-    @piece[7][6] = BlackBishop.new(position: [7, 6])
+    @piece[7][5] = BlackBishop.new(position: [7, 5])
+    @piece[7][6] = BlackKnight.new(position: [7, 6])
     @piece[7][7] = BlackRook.new(position: [7, 7])
   end
 end
