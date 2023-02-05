@@ -3,7 +3,7 @@
 # contains methods that work for all chess pieces
 # individual piece classes contain move specific methods
 class Piece
-  attr_reader :alive, :dead, :sign, :position, :color, :moves
+  attr_reader :alive, :dead, :sign, :position, :color, :moves, :type
 
   def initialize(sign: ' ', position: [nil])
     @sign = sign
