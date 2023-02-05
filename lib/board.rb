@@ -47,18 +47,6 @@ class Board
     check?(start_piece) # #move to game??????
   end
 
-  # def verify_input(player, start_piece, end_space, start_space)
-  #   until forbidden?(start_space, end_space, start_piece) == false
-  #     puts "Illegal move, choose space again or type 'cancel' to choose another piece"
-  #     input = gets.chomp
-  #     if input == 'cancel'
-  # 			move_piece(player, piece: player.select_piece, space: player.select_space)
-  # 		else
-  # 			move_piece(player, space: input)
-  # 		end
-  #   end
-  # end
-
   def assign_new_space(end_space, start_space)
     p @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
   end
@@ -68,11 +56,6 @@ class Board
   end
 
   def check?(piece)
-    # what about other pieces who could check after another piece moved?
-    #    Ex. a Rook moves to let a queen put king in check??
-    #    if king moves into check?
-    # Every piece checks for check every move?
-    # check if opposite king's position if forbidden?
     king = if piece.color == 'white'
              @black_king
            else
@@ -80,23 +63,28 @@ class Board
            end
     @board.each do |row|
       row.each do |game_piece|
+				# FIXME: Players own piece movement reveals their king in check?
         next unless game_piece.color != king.color &&
                     forbidden?([game_piece.position[0], game_piece.position[1]], [king.position[0],
                                                                                   king.position[1]], game_piece) == false
 
-        p game_piece
+        @attacker = game_piece
         puts "\n\n#{king.color.upcase}, CHECK\n\n\n"
+				checkmate?(space, king)
         return true
       end
     end
-    # if any possible next move results in check_mate?
-    # Player in check must move king out of check
   end
 
-  def check_mate?(space)
-    # if no move can keep king from being captured...
-    # and king cannot move to a safe space.
-    puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
+  def checkmate?(space, king)
+		# TODO: Checkmate.
+		# if no piece can block the checking path, and the king cannot move out of check. 
+		# any possible next move results in check_mate?
+		# Instance variable to capture attacking piece @attacker from #check
+		# create a Queue of spaces between @attacker and king.
+		# for each space, loop through the board checking each piece that is the same color as the king
+		# and check if there is not a #forbidden? path to the space.
+    puts 'Checkmate' 
     # Game.end_game
   end
 
@@ -112,7 +100,9 @@ class Board
     end_column = to[1]
     return true if on_board?(end_row, end_column) == false
     return true if piece.illegal?(@board, start_row, start_column, end_row, end_column) == true
-    return true if path_empty?(from, to) == false
+		if !piece.is_a?(WhiteKnight) || !piece.is_a?(BlackKnight)
+      return true if path_empty?(from, to)
+		end 
 
     false
   end
