@@ -10,5 +10,6 @@ class WhiteKnight < Piece
     @sign = sign
     @color = 'white'
     @position = position
+		@type = :knight
   end
 end

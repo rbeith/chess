@@ -11,5 +11,6 @@ class BlackKnight < Piece
     @sign = sign
     @color = 'black'
     @position = position
+		@type = :knight
   end
 end
