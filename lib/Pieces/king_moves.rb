@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Movement conditions for Kings
 module Kingmoves
   def illegal?(_board, start_row, start_column, end_row, end_column)
     case [end_row, end_column]

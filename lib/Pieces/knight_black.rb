@@ -3,6 +3,7 @@
 require './lib/Pieces/piece'
 require_relative 'knight_moves'
 
+# Black Knight gamepiece
 class BlackKnight < Piece
   include KnightMoves
 

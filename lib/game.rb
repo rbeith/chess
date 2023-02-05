@@ -2,8 +2,9 @@
 
 require_relative 'save_game'
 
+# Methods for starting, playing, and ending a game
 class Game
-  include Save_Game
+  include SaveGame
 
   attr_reader :game_board, :white, :black, :gameover, :current_player
 
@@ -32,7 +33,7 @@ class Game
     case choice
     when 'save'
       save_game
-      get_input
+      player_input
     when 'quit'
       exit
     else
@@ -40,17 +41,15 @@ class Game
     end
   end
 
-  def get_input
+  def player_input
     puts "#{@current_player.name}, select a piece to move; enter column then row. eg: 'b1'"
     puts "Or enter 'save' or 'quit'"
     save_or_quit(select_piece)
     @current_player.translate_piece_selection
-		puts 'Select the space to move your piece to'
+    puts 'Select the space to move your piece to'
     save_or_quit(select_space)
     @current_player.translate_space_selection
-		if verify_input(@current_player, current_piece, selected_space, selected_piece) == false
-			get_input
-		end
+    player_input if verify_input(@current_player, current_piece, selected_space, selected_piece) == false
   end
 
   def select_piece
@@ -65,37 +64,37 @@ class Game
     @game_board.draw_board
   end
 
-	def current_piece
-		@current_piece = @game_board.piece[@current_player.piece[0]][@current_player.piece[1]]
-	end
+  def current_piece
+    @current_piece = @game_board.piece[@current_player.piece[0]][@current_player.piece[1]]
+  end
 
-	def reset_space(space)
-		@current_player.space = space
-	end
+  def reset_space(space)
+    @current_player.space = space
+  end
 
-	def selected_space
-		@current_player.space
-	end
+  def selected_space
+    @current_player.space
+  end
 
-	def reset_piece(piece)
-		@current_player.piece = piece
-	end
+  def reset_piece(piece)
+    @current_player.piece = piece
+  end
 
-	def selected_piece
-		@current_player.piece
-	end
+  def selected_piece
+    @current_player.piece
+  end
 
-	def verify_input(player, start_piece, end_space, start_space)
+  def verify_input(_player, start_piece, end_space, start_space)
     if @game_board.forbidden?(start_space, end_space, start_piece) == true
       puts "\n\nForbidden move, choose again.\n\n\n"
-			false
-		else
-			true
-		end
+      false
+    else
+      true
+    end
   end
 
   def turn
-    get_input
+    player_input
     @game_board.move_piece(@current_player)
     puts draw_board
 

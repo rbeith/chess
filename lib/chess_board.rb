@@ -2,6 +2,7 @@
 
 require_relative 'board'
 
+# Starting piece positions for Chess
 module ChessBoard
   attr_reader :piece,
               :white_king,

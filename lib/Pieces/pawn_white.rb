@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# White Pawn class and movement conditions
 class WhitePawn < Piece
   def initialize(sign: '♙', position: [nil])
     @sign = sign

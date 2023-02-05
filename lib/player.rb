@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+# Methods for retrieving player input and translating
+# input for the board class to use.
 class Player
-	attr_accessor :space, :piece
-  attr_reader :name, :input
+  attr_accessor :space, :piece
+  attr_reader :name
 
   def initialize(name: 'player')
     @name = name
@@ -64,5 +66,4 @@ class Player
     }
     y_coordinate_hash[input]
   end
-
 end

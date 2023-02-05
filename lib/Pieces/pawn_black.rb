@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Black Pawn class with movement conditions
 class BlackPawn < Piece
   def initialize(sign: '♟︎', position: [nil])
     @sign = sign

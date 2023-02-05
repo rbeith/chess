@@ -2,6 +2,8 @@
 
 require_relative 'chess_board'
 
+# class for game board and movement behavior that is not piece specific
+# keeps track of piece location
 class Board
   include ChessBoard
 
@@ -42,7 +44,7 @@ class Board
     start_piece.update_position(space[0], space[1])
     assign_new_space(space, piece)
     assign_empty_space(piece)
-		check?(start_piece) ##move to game??????
+    check?(start_piece) # #move to game??????
   end
 
   # def verify_input(player, start_piece, end_space, start_space)
@@ -50,10 +52,10 @@ class Board
   #     puts "Illegal move, choose space again or type 'cancel' to choose another piece"
   #     input = gets.chomp
   #     if input == 'cancel'
-	# 			move_piece(player, piece: player.select_piece, space: player.select_space)
-	# 		else
-	# 			move_piece(player, space: input)
-	# 		end
+  # 			move_piece(player, piece: player.select_piece, space: player.select_space)
+  # 		else
+  # 			move_piece(player, space: input)
+  # 		end
   #   end
   # end
 
@@ -78,15 +80,14 @@ class Board
            end
     @board.each do |row|
       row.each do |game_piece|
-        if (game_piece.color != king.color &&
-               forbidden?([game_piece.position[0], game_piece.position[1]], [king.position[0],
-                                     king.position[1]], game_piece) == false)
-																		 p game_piece
-					puts "\n\n#{king.color.upcase}, CHECK\n\n\n"
-        	return true
-				end
+        next unless game_piece.color != king.color &&
+                    forbidden?([game_piece.position[0], game_piece.position[1]], [king.position[0],
+                                                                                  king.position[1]], game_piece) == false
+
+        p game_piece
+        puts "\n\n#{king.color.upcase}, CHECK\n\n\n"
+        return true
       end
-      false
     end
     # if any possible next move results in check_mate?
     # Player in check must move king out of check
@@ -94,12 +95,12 @@ class Board
 
   def check_mate?(space)
     # if no move can keep king from being captured...
-		# and king cannot move to a safe space.
+    # and king cannot move to a safe space.
     puts 'Checkmate' if space.is_a?(BlackKing) || space.is_a?(WhiteKing)
     # Game.end_game
   end
 
-	def on_board?(row, col)
+  def on_board?(row, col)
     true if row.between?(0, 7) && col.between?(0, 7)
   end
 
@@ -117,12 +118,12 @@ class Board
   end
 
   def path_empty?(from, to)
-		direction = direction(from, to)
+    direction = direction(from, to)
     row = from[0]
     col = from[1]
     case direction
     when :up
-			(row - 1).downto(to[0]) do |i|
+      (row - 1).downto(to[0]) do |i|
         return false if @board[i][col].sign != ' '
       end
     when :down

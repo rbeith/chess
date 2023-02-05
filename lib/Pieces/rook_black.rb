@@ -2,6 +2,7 @@
 
 require_relative 'rook_moves'
 
+# Black Rook gamepiece class
 class BlackRook < Piece
   include Rookmoves
 

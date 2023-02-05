@@ -2,6 +2,7 @@
 
 require_relative 'knight_moves'
 
+# White Knight gamepiece
 class WhiteKnight < Piece
   include KnightMoves
 

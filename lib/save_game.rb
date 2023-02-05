@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-module Save_Game
+# Methods for saving and retrieving saved games
+module SaveGame
   def save_game
     puts "\n"
     puts '    * * * * * * * *'

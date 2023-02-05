@@ -2,6 +2,7 @@
 
 require_relative 'queen_moves'
 
+# White Queen gamepiece class
 class WhiteQueen < Piece
   include Queenmoves
 

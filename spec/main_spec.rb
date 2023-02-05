@@ -6,13 +6,13 @@ describe Game do
   subject(:movement) { described_class.new }
   let(:player1) { instance_double('player1') }
 
-	describe '#turn' do
-		context 'When a player takes a turn' do
-			it 'updates the game board' do
-				# allow(game).to receive(:get_input).and_return
-			end
-		end
-	end
+  describe '#turn' do
+    context 'When a player takes a turn' do
+      it 'updates the game board' do
+        # allow(game).to receive(:get_input).and_return
+      end
+    end
+  end
 end
 
 describe Board do
@@ -51,7 +51,7 @@ describe Board do
       movement.board[3][1] = piece
       allow(player2).to receive(:piece).and_return([3, 1])
       allow(player2).to receive(:space).and_return([2, 0])
-			allow(movement).to receive(:verify_input).and_return(nil)
+      allow(movement).to receive(:verify_input).and_return(nil)
       movement.move_piece(player2)
       expect(movement.board[2][0].sign).to eq('♟︎')
     end
@@ -78,81 +78,80 @@ describe Board do
     end
   end
 
-	describe '#direction' do
-		subject(:find_direction) { described_class.new }
-		it 'can move up' do
-			expect(find_direction.direction([3, 3], [0, 3])).to eq(:up)
-		end
+  describe '#direction' do
+    subject(:find_direction) { described_class.new }
+    it 'can move up' do
+      expect(find_direction.direction([3, 3], [0, 3])).to eq(:up)
+    end
 
-		it 'can move down' do
-			expect(find_direction.direction([0, 3], [3, 3])).to eq(:down)
-		end
+    it 'can move down' do
+      expect(find_direction.direction([0, 3], [3, 3])).to eq(:down)
+    end
 
-		it 'can move right' do
-			expect(find_direction.direction([0, 0], [0, 3])).to eq(:right)
-		end
+    it 'can move right' do
+      expect(find_direction.direction([0, 0], [0, 3])).to eq(:right)
+    end
 
-		it 'can move left' do 
-			expect(find_direction.direction([0, 3], [0, 0])).to eq(:left)
-		end
-		
-		it 'can move up_left' do
-			expect(find_direction.direction([3, 3], [0, 0])).to eq(:up_left)
-		end
+    it 'can move left' do
+      expect(find_direction.direction([0, 3], [0, 0])).to eq(:left)
+    end
 
-		it 'can move up_right' do
-			expect(find_direction.direction([3, 0], [0, 3])).to eq(:up_right)
-		end
+    it 'can move up_left' do
+      expect(find_direction.direction([3, 3], [0, 0])).to eq(:up_left)
+    end
 
-		it 'can move down_right' do
-			expect(find_direction.direction([0, 3], [3, 0])).to eq(:down_left)
-		end
+    it 'can move up_right' do
+      expect(find_direction.direction([3, 0], [0, 3])).to eq(:up_right)
+    end
 
-		it 'can move down_left' do
-			expect(find_direction.direction([0, 0], [3, 3])).to eq(:down_right)
-		end
-	end
+    it 'can move down_right' do
+      expect(find_direction.direction([0, 3], [3, 0])).to eq(:down_left)
+    end
 
-	
-	describe '#path_empty?' do
-	subject(:blocked) { described_class.new }
-
-		it 'can move in a straight line when there are no pieces in path' do
-			expect(blocked.path_empty?([1, 3], [3, 3])).to be true
-		end
-
-		it 'cannot move when a piece is blocking' do
-			expect(blocked.path_empty?([0, 3], [3, 3])).to be false
-		end
+    it 'can move down_left' do
+      expect(find_direction.direction([0, 0], [3, 3])).to eq(:down_right)
+    end
   end
 
-	describe '#forbidden?' do
-	subject(:allowed_movement) { described_class.new }
+  describe '#path_empty?' do
+    subject(:blocked) { described_class.new }
 
-		it 'allows a pawn to move from a starting position' do
-			board = allowed_movement.board
-			piece = board[1][0]
-			expect(allowed_movement.forbidden?([1, 0], [2, 0], piece)).to be false
-		end
+    it 'can move in a straight line when there are no pieces in path' do
+      expect(blocked.path_empty?([1, 3], [3, 3])).to be true
+    end
 
-		it 'does not allow a rook to move with pieces in front' do
-			board = allowed_movement.board
-			piece = board[0][0]
-			expect(allowed_movement.forbidden?([0, 0], [2, 0], piece)).to be true
-		end
+    it 'cannot move when a piece is blocking' do
+      expect(blocked.path_empty?([0, 3], [3, 3])).to be false
+    end
+  end
 
-		it 'does not allow the black queen to move over other pieces' do
-			board = allowed_movement.board
-			piece = board[7][3]
-			expect(allowed_movement.forbidden?([7, 3], [2, 3], piece)).to be true
-		end
+  describe '#forbidden?' do
+    subject(:allowed_movement) { described_class.new }
 
-		it 'does not allow the white queen to move over other pieces' do
-			board = allowed_movement.board
-			piece = board[0][3]
-			expect(allowed_movement.forbidden?([0, 3], [2, 3], piece)).to be true
-		end
-	end
+    it 'allows a pawn to move from a starting position' do
+      board = allowed_movement.board
+      piece = board[1][0]
+      expect(allowed_movement.forbidden?([1, 0], [2, 0], piece)).to be false
+    end
+
+    it 'does not allow a rook to move with pieces in front' do
+      board = allowed_movement.board
+      piece = board[0][0]
+      expect(allowed_movement.forbidden?([0, 0], [2, 0], piece)).to be true
+    end
+
+    it 'does not allow the black queen to move over other pieces' do
+      board = allowed_movement.board
+      piece = board[7][3]
+      expect(allowed_movement.forbidden?([7, 3], [2, 3], piece)).to be true
+    end
+
+    it 'does not allow the white queen to move over other pieces' do
+      board = allowed_movement.board
+      piece = board[0][3]
+      expect(allowed_movement.forbidden?([0, 3], [2, 3], piece)).to be true
+    end
+  end
 end
 
 describe Player do
@@ -197,28 +196,19 @@ describe WhitePawn do
     board = Array.new(5) { Array.new(4, Piece.new) }
 
     it 'forbids illegal move' do
-      from = [1, 0]
-      to = [4, 0]
       expect(pawn_movement.illegal?(board, 1, 0, 4, 0)).to be true
     end
 
     it 'allows legal move' do
-      from = [1, 0]
-      to = [2, 0]
       expect(pawn_movement.illegal?(board, 1, 0, 2, 0)).to be false
     end
 
     it 'allows pawn to attack diagonally' do
-      from = [1, 0]
       board[2][1] = BlackPawn.new
-      board[2][1]
-      to = [2, 1]
       expect(pawn_movement.illegal?(board, 1, 0, 2, 0)).to be false
     end
 
     it 'forbids diagonal attack if space empty' do
-      from = [2, 1]
-      to = [3, 2]
       expect(pawn_movement.illegal?(board, 2, 1, 3, 2)).to be true
     end
   end
@@ -226,31 +216,27 @@ end
 
 describe WhiteKing do
   subject(:king_movement) { described_class.new }
-	board = Array.new(4) { Array.new(4, Piece.new) }
+  board = Array.new(4) { Array.new(4, Piece.new) }
 
   it 'cannot move two spaces' do
-    from = [0, 1]
-    to = [2, 1]
     expect(king_movement.illegal?(board, 0, 1, 2, 1)).to be true
   end
 end
 
 describe WhiteBishop do
   describe '#illegal?' do
-		subject(:bishop_movement) { described_class.new }
-		board = Array.new(4) { Array.new(4, Piece.new) }
+    subject(:bishop_movement) { described_class.new }
+    board = Array.new(4) { Array.new(4, Piece.new) }
 
-		it 'can move along a diagonal' do
-			expect(bishop_movement.illegal?(board, 0, 0, 3, 3)).to be false
-		end
+    it 'can move along a diagonal' do
+      expect(bishop_movement.illegal?(board, 0, 0, 3, 3)).to be false
+    end
 
-		it 'cannot move along a row' do
-			expect(bishop_movement.illegal?(board, 0, 0, 0, 3)).to be true
-		end
-	end
+    it 'cannot move along a row' do
+      expect(bishop_movement.illegal?(board, 0, 0, 0, 3)).to be true
+    end
+  end
 end
-
-	
 
 describe WhiteQueen do
   subject(:queen_movement) { described_class.new }
@@ -258,20 +244,14 @@ describe WhiteQueen do
 
   describe '#illegal?' do
     it 'can move straight down a column' do
-      from = [0, 0]
-      to = [3, 0]
       expect(queen_movement.illegal?(board, 0, 0, 3, 0)).to be false
     end
 
     it 'can move along a row' do
-      from = [0, 0]
-      to = [0, 3]
       expect(queen_movement.illegal?(board, 0, 0, 0, 3)).to be false
     end
 
     it 'can move along a diagonal' do
-      from = [0, 0]
-      to = [3, 3]
       expect(queen_movement.illegal?(board, 0, 0, 3, 3)).to be false
     end
   end
@@ -282,33 +262,33 @@ describe WhiteRook do
   board = Array.new(4) { Array.new(4, Piece.new) }
 
   describe '#illegal?' do
-		it 'can move along a column' do
-			expect(rook_movement.illegal?(board, 3, 0, 0, 0)).to be false
-		end
-	
-		it 'can move along a row' do
-			expect(rook_movement.illegal?(board, 0, 0, 0, 3)).to be false
-		end
+    it 'can move along a column' do
+      expect(rook_movement.illegal?(board, 3, 0, 0, 0)).to be false
+    end
 
-		it 'cannot move along a diagonal' do
-			expect(rook_movement.illegal?(board, 0, 0, 3, 3)).to be true
+    it 'can move along a row' do
+      expect(rook_movement.illegal?(board, 0, 0, 0, 3)).to be false
+    end
+
+    it 'cannot move along a diagonal' do
+      expect(rook_movement.illegal?(board, 0, 0, 3, 3)).to be true
     end
   end
 end
 
 describe WhiteKnight do
-	subject(:knight_moves) { described_class.new }
-	board = nil
+  subject(:knight_moves) { described_class.new }
+  board = nil
 
-	describe '#illegal?' do
-		it 'can move +2, +1' do
-			expect(knight_moves.illegal?(board, 0, 2, 2, 3)).to be false
-		end
+  describe '#illegal?' do
+    it 'can move +2, +1' do
+      expect(knight_moves.illegal?(board, 0, 2, 2, 3)).to be false
+    end
 
-		it 'cannot move +2, +2' do
-			expect(knight_moves.illegal?(board, 0, 2, 2, 4)).to be true
-		end
-	end
+    it 'cannot move +2, +2' do
+      expect(knight_moves.illegal?(board, 0, 2, 2, 4)).to be true
+    end
+  end
 end
 describe Piece do
 end

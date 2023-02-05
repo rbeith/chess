@@ -2,12 +2,13 @@
 
 require_relative 'king_moves'
 
+# Black King gamepiece
 class BlackKing < Piece
   include Kingmoves
 
   def initialize(sign: '♚', position: [nil])
     @sign = sign
-    @position = [7, 4]
+    @position = position
     @color = 'black'
   end
 end
