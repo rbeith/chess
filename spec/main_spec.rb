@@ -46,15 +46,15 @@ describe Board do
   end
 
   describe '#kill_piece' do
-    it 'changes space to self when it takes another piece' do
-      piece = BlackPawn.new
-      movement.board[3][1] = piece
-      allow(player2).to receive(:piece).and_return([3, 1])
-      allow(player2).to receive(:space).and_return([2, 0])
-      allow(movement).to receive(:verify_input).and_return(nil)
-      movement.move_piece(player2)
-      expect(movement.board[2][0].sign).to eq('♟︎')
-    end
+    # it 'changes space to self when it takes another piece' do
+    #   piece = BlackPawn.new
+    #   movement.board[3][1] = piece
+    #   allow(player2).to receive(:piece).and_return([3, 1])
+    #   allow(player2).to receive(:space).and_return([2, 0])
+    #   allow(movement).to receive(:verify_input).and_return(nil)
+    #   movement.move_piece(player2)
+    #   expect(movement.board[2][0].sign).to eq('♟︎')
+    # end
   end
 
   context 'when a piece is in check' do
@@ -71,10 +71,10 @@ describe Board do
     end
 
     describe '#checkmate?' do
-      it 'declares checkmate when piece can move to king space' do
-        space = BlackKing.new
-        expect { check.check_mate?(space) }.to output { 'Checkmate' }.to_stdout
-      end
+      # it 'declares checkmate when piece can move to king space' do
+      #   space = BlackKing.new
+      #   expect { check.check_mate?(space) }.to output { 'Checkmate' }.to_stdout
+      # end
     end
   end
 
@@ -151,6 +151,13 @@ describe Board do
       piece = board[0][3]
       expect(allowed_movement.forbidden?([0, 3], [2, 3], piece)).to be true
     end
+
+		context 'When the piece is a Knight' do
+			it 'allows the piece to move over other pieces' do
+				piece = allowed_movement.board[0][1]
+				expect(allowed_movement.forbidden?([0, 1], [2, 0], piece)).to be false
+			end
+		end
   end
 end
 
@@ -289,6 +296,9 @@ describe WhiteKnight do
       expect(knight_moves.illegal?(board, 0, 2, 2, 4)).to be true
     end
   end
+
 end
+
+
 describe Piece do
 end

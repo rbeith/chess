@@ -40,15 +40,14 @@ class Board
 
   def move_piece(player, piece: player.piece, space: player.space)
     start_piece = @board[piece[0]][piece[1]]
-    # verify_input(player, start_piece, space, piece)
     start_piece.update_position(space[0], space[1])
     assign_new_space(space, piece)
     assign_empty_space(piece)
-    check?(start_piece) # #move to game??????
+    check?(start_piece)
   end
 
   def assign_new_space(end_space, start_space)
-    p @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
+    @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
   end
 
   def assign_empty_space(start_space)
@@ -92,7 +91,6 @@ class Board
     true if row.between?(0, 7) && col.between?(0, 7)
   end
 
-  # checks if any movement is forbidden
   def forbidden?(from, to, piece)
     start_row = from[0]
     start_column = from[1]
@@ -100,9 +98,7 @@ class Board
     end_column = to[1]
     return true if on_board?(end_row, end_column) == false
     return true if piece.illegal?(@board, start_row, start_column, end_row, end_column) == true
-		if !piece.is_a?(WhiteKnight) || !piece.is_a?(BlackKnight)
-      return true if path_empty?(from, to)
-		end 
+		return true if path_empty?(from, to) == false && piece.type != :knight
 
     false
   end
