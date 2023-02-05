@@ -7,7 +7,7 @@ class BlackPawn < Piece
     @position = position
   end
 
-  def conditions(board, start_row, start_column, end_row, end_column)
+  def illegal?(board, start_row, start_column, end_row, end_column)
     if [end_row, end_column] == [start_row - 1, start_column]
       false
     elsif start_row == 6 && [end_row, end_column] == [start_row - 2, start_column]

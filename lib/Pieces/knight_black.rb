@@ -8,7 +8,6 @@ class BlackKnight < Piece
 
   def initialize(sign: '♞', position: [nil])
     @sign = sign
-    @moves = [[2, 2, 1, -1, -2, -2, -1, 1], [1, -1, -2, -2, -1, 1, 2, 2]]
     @color = 'black'
     @position = position
   end

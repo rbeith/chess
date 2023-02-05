@@ -9,7 +9,6 @@ class Piece
     @sign = sign
     @position = position
     @color = nil
-    @moves
   end
 
   def captured
@@ -17,7 +16,7 @@ class Piece
   end
 
 	#default for empty space
-	def conditions(...)
+	def illegal?(...)
 		true
 	end
 
