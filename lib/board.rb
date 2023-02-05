@@ -110,7 +110,7 @@ class Board
     end_row = to[0]
     end_column = to[1]
     return true if on_board?(end_row, end_column) == false
-    return true if piece.conditions(@board, start_row, start_column, end_row, end_column) == true
+    return true if piece.illegal?(@board, start_row, start_column, end_row, end_column) == true
     return true if path_empty?(from, to) == false
 
     false
