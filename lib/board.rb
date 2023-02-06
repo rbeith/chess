@@ -69,10 +69,11 @@ class Board
 
         @attacker = game_piece
         puts "\n\n#{king.color.upcase}, CHECK\n\n\n"
-				checkmate?(space, king)
+				# checkmate?(space, king)
         return true
       end
     end
+		false
   end
 
   def checkmate?(space, king)
@@ -127,7 +128,7 @@ class Board
     when :up_left
       i = row - 1
       j = col - 1
-      while i <= to[0] && j <= to[1]
+      while i < to[0] && j < to[1]
         return false if @board[i][j].sign != ' '
 
         i -= 1
@@ -136,7 +137,7 @@ class Board
     when :up_right
       i = row - 1
       j = col + 1
-      while i <= to[0] && j >= to[1]
+      while i < to[0] && j > to[1]
         return false if @board[i][j].sign != ' '
 
         i -= 1
@@ -145,7 +146,7 @@ class Board
     when :down_left
       i = row + 1
       j = col - 1
-      while i < to[0] && j >= to[1]
+      while i < to[0] && j > to[1]
         return false if @board[i][j].sign != ' '
 
         i += 1

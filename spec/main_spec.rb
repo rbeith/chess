@@ -61,20 +61,32 @@ describe Board do
     subject(:check) { described_class.new }
 
     describe '#check' do
-      it 'declares check when next move can be to king space' do
-        board = Board.new
-        pawn = BlackPawn.new
-        board.board[1][5] = pawn
-        pawn.update_position(1, 5)
+      it 'declares check true' do
+        check.board[1][3] = check.board[6][3]
+				check.board[6][3] = Piece.new 
+			  pawn = check.board[1][3]
+        pawn.update_position(1, 3)
+				puts check.draw_board
         expect(check.check?(pawn)).to be true
       end
     end
 
     describe '#checkmate?' do
-      # it 'declares checkmate when piece can move to king space' do
-      #   space = BlackKing.new
-      #   expect { check.check_mate?(space) }.to output { 'Checkmate' }.to_stdout
-      # end
+      it 'declares checkmate when piece can move to king space' do
+				check.board = Array.new(3, Array.new(3))
+				check.board[0][0] = WhiteKing.new
+				check.board[1][1] = BlackQueen.new
+        expect(check.checkmate?( )).to be true
+      end
+
+			it 'declares checkmate when piece can move to king space' do
+				check.board = Array.new(3, Array.new(3))
+				check.board[0][0] = WhiteKing.new
+				check.board[1][1] = WhitePawn.new
+				check.board[2][2] = BlackQueen.new
+        expect(check.checkmate?( )).to be false
+      end
+
     end
   end
 
