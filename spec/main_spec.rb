@@ -62,66 +62,39 @@ describe Board do
 
     describe '#check' do
       it 'declares check true' do
-        check.board[1][3] = check.board[6][3]
-				check.board[6][3] = Piece.new 
-			  pawn = check.board[1][3]
-        pawn.update_position(1, 3)
-				puts check.draw_board
-        expect(check.check?(pawn)).to be true
+				check.board = Array.new(3, Array.new(3, Piece.new))
+        king = check.board[1][0] = BlackKing.new(position: [1, 0])
+				check.instance_variable_set(:@black_king, king)
+				rook = check.board[1][2] = WhiteRook.new(position: [1, 2])
+        expect(check.check?(rook)).to be true
       end
     end
 
     describe '#checkmate?' do
-      it 'declares checkmate when piece can move to king space' do
-				check.board = Array.new(3, Array.new(3))
-				check.board[0][0] = WhiteKing.new
-				check.board[1][1] = BlackQueen.new
-        expect(check.checkmate?( )).to be true
+      it 'declares checkmate when no piece can block move to king space' do
+        check.board = Array.new(3, Array.new(3, Piece.new))
+        check.board[0][0] = WhiteKing.new
+        king = check.board[0][0]
+        king.update_position(0, 0)
+        check.attacker_path = [[1, 1]]
+        check.board[2][2] = BlackQueen.new
+        queen = check.board[2][2]
+        queen.update_position(2, 2)
+        check.checkmate?(king)
+        expect(check.checkmate).to be true
       end
 
-			it 'declares checkmate when piece can move to king space' do
-				check.board = Array.new(3, Array.new(3))
-				check.board[0][0] = WhiteKing.new
-				check.board[1][1] = WhitePawn.new
-				check.board[2][2] = BlackQueen.new
-        expect(check.checkmate?( )).to be false
+      it 'does not declare checkmate when piece can block move to king space' do
+        check.board = Array.new(4, Array.new(4, Piece.new))
+        king = check.board[0][0] = WhiteKing.new
+        king.update_position(0, 0)
+        pawn = check.board[0][1] = WhitePawn.new
+        pawn.update_position(0, 1)
+        queen = check.board[3][3] = BlackQueen.new
+        queen.update_position(3, 3)
+        check.attacker_path = [[1, 1], [2, 2]]
+        expect(check.checkmate?(king)).to be false
       end
-
-    end
-  end
-
-  describe '#direction' do
-    subject(:find_direction) { described_class.new }
-    it 'can move up' do
-      expect(find_direction.direction([3, 3], [0, 3])).to eq(:up)
-    end
-
-    it 'can move down' do
-      expect(find_direction.direction([0, 3], [3, 3])).to eq(:down)
-    end
-
-    it 'can move right' do
-      expect(find_direction.direction([0, 0], [0, 3])).to eq(:right)
-    end
-
-    it 'can move left' do
-      expect(find_direction.direction([0, 3], [0, 0])).to eq(:left)
-    end
-
-    it 'can move up_left' do
-      expect(find_direction.direction([3, 3], [0, 0])).to eq(:up_left)
-    end
-
-    it 'can move up_right' do
-      expect(find_direction.direction([3, 0], [0, 3])).to eq(:up_right)
-    end
-
-    it 'can move down_right' do
-      expect(find_direction.direction([0, 3], [3, 0])).to eq(:down_left)
-    end
-
-    it 'can move down_left' do
-      expect(find_direction.direction([0, 0], [3, 3])).to eq(:down_right)
     end
   end
 
@@ -146,6 +119,12 @@ describe Board do
       expect(allowed_movement.forbidden?([1, 0], [2, 0], piece)).to be false
     end
 
+    it 'allows a black pawn to move' do
+      board = allowed_movement.board
+      piece = board[6][0]
+      expect(allowed_movement.forbidden?([6, 0], [4, 0], piece)).to be false
+    end
+
     it 'does not allow a rook to move with pieces in front' do
       board = allowed_movement.board
       piece = board[0][0]
@@ -164,12 +143,12 @@ describe Board do
       expect(allowed_movement.forbidden?([0, 3], [2, 3], piece)).to be true
     end
 
-		context 'When the piece is a Knight' do
-			it 'allows the piece to move over other pieces' do
-				piece = allowed_movement.board[0][1]
-				expect(allowed_movement.forbidden?([0, 1], [2, 0], piece)).to be false
-			end
-		end
+    context 'When the piece is a Knight' do
+      it 'allows the piece to move over other pieces' do
+        piece = allowed_movement.board[0][1]
+        expect(allowed_movement.forbidden?([0, 1], [2, 0], piece)).to be false
+      end
+    end
   end
 end
 
@@ -179,9 +158,9 @@ describe Player do
   describe '#board_location' do
     subject(:inputs) { described_class.new }
 
-    it 'accepts a two character input and retuns array coordinates' do
+    it 'accepts a two character input and returns array coordinates' do
       allow(inputs).to receive(:gets).and_return('b1')
-      expect(inputs.board_location).to eq([1, 0])
+      expect(inputs.board_location).to eq([0, 1])
     end
   end
 
@@ -191,7 +170,7 @@ describe Player do
     it 'allows user to select space and returns board coordinates' do
       allow(piece).to receive(:gets).and_return('b1')
       piece.select_piece
-      expect(piece.board_location).to eq([1, 0])
+      expect(piece.board_location).to eq([0, 1])
     end
   end
 
@@ -203,7 +182,7 @@ describe Player do
       space.select_piece
       allow(space).to receive(:gets).and_return('b1')
       space.select_space
-      expect(space.board_location).to eq([1, 0])
+      expect(space.board_location).to eq([0, 1])
     end
   end
 end
@@ -229,6 +208,18 @@ describe WhitePawn do
 
     it 'forbids diagonal attack if space empty' do
       expect(pawn_movement.illegal?(board, 2, 1, 3, 2)).to be true
+    end
+  end
+end
+
+describe BlackPawn do
+  subject(:pawn_movement) { described_class.new }
+
+  describe '#illegal?' do
+    board = []
+
+    it 'allows legal move' do
+      expect(pawn_movement.illegal?(board, 6, 3, 4, 3)).to be false
     end
   end
 end
@@ -308,9 +299,7 @@ describe WhiteKnight do
       expect(knight_moves.illegal?(board, 0, 2, 2, 4)).to be true
     end
   end
-
 end
-
 
 describe Piece do
 end

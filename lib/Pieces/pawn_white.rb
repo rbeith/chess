@@ -3,6 +3,7 @@
 # White Pawn class and movement conditions
 class WhitePawn < Piece
   def initialize(sign: '♙', position: [nil])
+    super
     @sign = sign
     @color = 'white'
     @position = position

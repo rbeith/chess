@@ -7,6 +7,7 @@ class BlackQueen < Piece
   include Queenmoves
 
   def initialize(sign: '♛', position: [nil])
+    super
     @sign = sign
     @color = 'black'
     @position = position

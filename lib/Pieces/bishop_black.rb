@@ -8,6 +8,7 @@ class BlackBishop < Piece
   include Bishopmoves
 
   def initialize(sign: '♝', position: [nil])
+    super
     @sign = sign
     @color = 'black'
     @position = position

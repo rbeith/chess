@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'board'
+# require_relative 'board'
 
 # Starting piece positions for Chess
 module ChessBoard

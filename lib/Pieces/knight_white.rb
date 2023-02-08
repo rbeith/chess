@@ -7,9 +7,10 @@ class WhiteKnight < Piece
   include KnightMoves
 
   def initialize(sign: '♘', position: [nil])
+    super
     @sign = sign
     @color = 'white'
     @position = position
-		@type = :knight
+    @type = :knight
   end
 end

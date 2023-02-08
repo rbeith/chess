@@ -15,14 +15,11 @@ class Piece
     @captured = true
   end
 
-	#default for empty space
-	def illegal?(...)
-		true
-	end
+  def illegal?(*_arguments)
+    true
+  end
 
-  # tracks the current position of the piece
   def update_position(row, col)
     @position = [row, col]
   end
-
 end

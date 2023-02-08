@@ -7,8 +7,9 @@ class WhiteRook < Piece
   include Rookmoves
 
   def initialize(sign: '♖', position: [nil])
+    super
     @sign = sign
-    @color = 'black'
+    @color = 'white'
     @position = position
   end
 end

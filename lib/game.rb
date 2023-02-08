@@ -22,7 +22,7 @@ class Game
   end
 
   def declare_winner
-    puts "#{@winner} wins!"
+    puts "#{@current_player} wins!"
   end
 
   def message

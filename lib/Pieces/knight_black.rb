@@ -8,9 +8,10 @@ class BlackKnight < Piece
   include KnightMoves
 
   def initialize(sign: '♞', position: [nil])
+    super
     @sign = sign
     @color = 'black'
     @position = position
-		@type = :knight
+    @type = :knight
   end
 end

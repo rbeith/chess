@@ -16,7 +16,7 @@ module SaveGame
   def load_game
     puts "\nTo see a list of saved games, enter \'y\'."
     puts 'Or press any key to continue.'
-    input = gets.chomp
+    input = $stdin.gets.chomp
     if input == 'y'
       choose_file
       game = YAML.safe_load_file("saved_games/#{@game_to_load}", aliases: true, permitted_classes: [Game,
@@ -41,20 +41,25 @@ module SaveGame
     end
   end
 
-  def choose_file
-    saved_games = []
-    game_dir = Dir.open('saved_games')
+  def empty_directory
+    return unless Dir.empty?('saved_games')
 
-    if Dir.empty?('saved_games')
-      puts "\n\n\n\nNo saved games... Try again.\n\n\n\n"
-      load_game
-    end
+    puts "\n\n\n\nNo saved games... Try again.\n\n\n\n"
+    load_game
+  end
 
-    game_dir.each_child { |file| saved_games.push(file) }
+  def list_saved_games(directory)
+    directory.each_child { |file| saved_games.push(file) }
     puts "\nHere is a list of saved games:"
     saved_games.each_with_index { |file, index| puts "\n#{index + 1}: #{file}" }
     puts 'Enter the number to open the saved game.'
-    input = gets.chomp.to_i
-    @game_to_load = saved_games[input - 1]
+  end
+
+  def choose_file
+    saved_games = []
+    game_dir = Dir.open('saved_games')
+    empty_directory
+    list_saved_games(game_dir)
+    @game_to_load = saved_games[gets.chomp.to_i - 1]
   end
 end

@@ -50,7 +50,7 @@ class Player
     arr = input.split(//)
     arr[0] = letter_to_row(arr[0].to_sym)
     arr[1] = arr[1].to_i - 1
-    arr
+    arr.reverse
   end
 
   def letter_to_row(input)
