@@ -2,6 +2,7 @@
 
 require_relative 'chess_board'
 require_relative 'check'
+require 'colorize'
 
 # class for game board and movement behavior that is not piece specific
 # keeps track of piece location
@@ -9,8 +10,8 @@ class Board
   include ChessBoard
   include Check
 
-  attr_accessor :board, :attacker_path, :forbidden
-  attr_reader :white_king, :black_king, :piece, :checkmate
+  attr_accessor :board, :attacker_path
+  attr_reader :white_king, :black_king, :piece, :checkmate, :current_player
 
   def initialize(empty_space: Piece.new)
     @board = new_board
@@ -18,7 +19,6 @@ class Board
     place_pieces
     @attacker_path = []
     @checkmate = true
-    @forbidden = nil
   end
 
   def draw_board
@@ -44,11 +44,14 @@ class Board
   end
 
   def move_piece(player, piece: player.piece, space: player.space)
+		player = @current_player
     start_piece = @board[piece[0]][piece[1]]
     start_piece.update_position(space[0], space[1])
     assign_new_space(space, piece)
     assign_empty_space(piece)
     check?(start_piece)
+		# TODO: Undo move?
+		# FIXME: Can't move onto space if occupied by same color
   end
 
   def assign_new_space(end_space, start_space)
@@ -59,16 +62,8 @@ class Board
     @board[start_space[0]][start_space[1]] = @empty_space
   end
 
-  # def king_color(piece)
-  #   if piece.color == 'white'
-  #     @black_king
-  #   else
-  #     @white_king
-  #   end
-  # end
-
   def on_board?(row, col)
-    @forbidden = true unless row.between?(0, 7) && col.between?(0, 7)
+    row.between?(0, 7) && col.between?(0, 7)
   end
 
   def forbidden?(from, to, piece)
@@ -77,13 +72,10 @@ class Board
     end_row = to[0]
     end_column = to[1]
 
-    on_board?(end_row, end_column)
-    path_empty?(from, to) if piece.type != :knight
-    @forbidden = true if piece.illegal?(@board, start_row, start_column, end_row, end_column) == true
+    return true if on_board?(end_row, end_column) == false
+    return true if path_empty?(from, to) == false && piece.type != :knight 
+    return true if piece.illegal?(@board, start_row, start_column, end_row, end_column) == true
 
-    return true if @forbidden == true
-
-    @forbidden = false
     false
   end
 
@@ -114,7 +106,6 @@ class Board
     (row - 1).downto(to[0] + 1) do |i|
       arr = [] << [i, col]
       @attacker_path = arr
-      @forbidden = true if @board[i][col].sign != ' '
       return false if @board[i][col].sign != ' '
     end
     true
@@ -124,7 +115,6 @@ class Board
     (row + 1).upto(to[0] - 1) do |i|
       arr = [] << [i, col]
       @attacker_path = arr
-      @forbidden = true if @board[i][col].sign != ' '
       return false if @board[i][col].sign != ' '
     end
     true
@@ -134,7 +124,6 @@ class Board
     (col - 1).downto(to[1] + 1) do |j|
       arr = [] << [row, j]
       @attacker_path = arr
-      @forbidden = true if @board[row][j].sign != ' '
       return false if @board[row][j].sign != ' '
     end
     true
@@ -144,7 +133,6 @@ class Board
     (col + 1).upto(to[1] - 1) do |j|
       arr = [] << [row, j]
       @attacker_path = arr
-      @forbidden = true if @board[row][j].sign != ' '
       return false if @board[row][j].sign != ' '
     end
     true
@@ -156,7 +144,6 @@ class Board
     while i < to[0] - 1 && j < to[1] - 1
       arr = [] << [i, j]
       @attacker_path = arr
-      @forbidden = true if @board[i][j].sign != ' '
       return false if @board[i][j].sign != ' '
 
       i -= 1
@@ -171,7 +158,6 @@ class Board
     while i < to[0] - 1 && j > to[1] + 1
       arr = [] << [i, j]
       @attacker_path = arr
-      @forbidden = true if @board[i][j].sign != ' '
       return false if @board[i][j].sign != ' '
 
       i -= 1
@@ -186,7 +172,6 @@ class Board
     while i < to[0] - 1 && j > to[1] + 1
       arr = [] << [i, j]
       @attacker_path = arr
-      @forbidden = true if @board[i][j].sign != ' '
       return false if @board[i][j].sign != ' '
 
       i += 1
@@ -201,7 +186,6 @@ class Board
     while i < to[0] - 1 && j < to[1] - 1
       arr = [] << [i, j]
       @attacker_path = arr
-      @forbidden = true if @board[i][j].sign != ' '
       return false if @board[i][j].sign != ' '
 
       i += 1
