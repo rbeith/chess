@@ -4,10 +4,11 @@
 # input for the board class to use.
 class Player
   attr_accessor :space, :piece
-  attr_reader :name
+  attr_reader :name, :color
 
-  def initialize(name: 'player')
+  def initialize(name: 'player', color: nil)
     @name = name
+		@color = color
   end
 
   def input(_space, _piece)
