@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-# require_relative 'board'
-
 # Starting piece positions for Chess
 module ChessBoard
   attr_reader :piece,
               :white_king,
               :black_king
 
+	# TODO: @piece should be piece. instance variable not needed as assigned to @board?
+	# Will require changes to tests.
   def new_board
     @piece = Array.new(8) { Array.new(8, Piece.new) }
   end

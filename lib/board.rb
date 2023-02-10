@@ -2,13 +2,15 @@
 
 require_relative 'chess_board'
 require_relative 'check'
+require_relative 'pathfinder'
 require 'colorize'
 
 # class for game board and movement behavior that is not piece specific
 # keeps track of piece location
 class Board
-  include ChessBoard
+  include Pathfinder
   include Check
+  include ChessBoard
 
   attr_accessor :board, :attacker_path
   attr_reader :white_king, :black_king, :piece, :checkmate, :current_player
@@ -44,18 +46,32 @@ class Board
   end
 
   def move_piece(player, piece: player.piece, space: player.space)
-		player = @current_player
     start_piece = @board[piece[0]][piece[1]]
     start_piece.update_position(space[0], space[1])
     assign_new_space(space, piece)
     assign_empty_space(piece)
     check?(start_piece)
-		# TODO: Undo move?
-		# FIXME: Can't move onto space if occupied by same color
+    # TODO: Undo move? could quietly save a game and load it if undo.
   end
 
+	def piece(row, col)
+		@board[row][col]
+	end
+
+	def row_from(input)
+		input[0]
+	end
+
+	def col_from(input)
+		input[1]
+	end
+
+	def new_space(input)
+		@board[row_from(end_space)][col_from(end_space)]
+	end
+
   def assign_new_space(end_space, start_space)
-    @board[end_space[0]][end_space[1]] = @board[start_space[0]][start_space[1]]
+		@board[row_from(end_space)][col_from(end_space)] = piece(row_from(start_space), col_from(start_space))
   end
 
   def assign_empty_space(start_space)
@@ -66,131 +82,17 @@ class Board
     row.between?(0, 7) && col.between?(0, 7)
   end
 
-  def forbidden?(from, to, piece)
-    start_row = from[0]
-    start_column = from[1]
-    end_row = to[0]
-    end_column = to[1]
+  def forbidden?(start_space, end_space, piece)
+    start_row = row_from(start_space)
+    start_column = col_from(start_space)
+    end_row = row_from(end_space)
+    end_column = col_from(end_space)
 
+		return true if @board[end_row][end_column].color == @board[start_row][start_column].color
     return true if on_board?(end_row, end_column) == false
-    return true if path_empty?(from, to) == false && piece.type != :knight 
+    return true if path_empty?(start_space, end_space) == false && piece.type != :knight
     return true if piece.illegal?(@board, start_row, start_column, end_row, end_column) == true
 
     false
-  end
-
-  def path_empty?(from, to)
-    row = from[0]
-    col = from[1]
-
-    if to[0] > from[0] && to[1] == from[1]
-      down(row, col, to)
-    elsif to[0] < from[0] && to[1] == from[1]
-      up(row, col, to)
-    elsif to[1] > from[1] && to[0] == from[0]
-      right(row, col, to)
-    elsif to[1] < from[1] && to[0] == from[0]
-      left(row, col, to)
-    elsif to[0] > from[0] && to[1] > from[1]
-      down_right(row, col, to)
-    elsif to[0] > from[0] && to[1] < from[1]
-      down_left(row, col, to)
-    elsif to[0] < from[0] && to[1] > from[1]
-      up_right(row, col, to)
-    elsif to[0] < from[0] && to[1] < from[1]
-      up_left(row, col, to)
-    end
-  end
-
-  def up(row, col, to)
-    (row - 1).downto(to[0] + 1) do |i|
-      arr = [] << [i, col]
-      @attacker_path = arr
-      return false if @board[i][col].sign != ' '
-    end
-    true
-  end
-
-  def down(row, col, to)
-    (row + 1).upto(to[0] - 1) do |i|
-      arr = [] << [i, col]
-      @attacker_path = arr
-      return false if @board[i][col].sign != ' '
-    end
-    true
-  end
-
-  def left(row, col, to)
-    (col - 1).downto(to[1] + 1) do |j|
-      arr = [] << [row, j]
-      @attacker_path = arr
-      return false if @board[row][j].sign != ' '
-    end
-    true
-  end
-
-  def right(row, col, to)
-    (col + 1).upto(to[1] - 1) do |j|
-      arr = [] << [row, j]
-      @attacker_path = arr
-      return false if @board[row][j].sign != ' '
-    end
-    true
-  end
-
-  def up_left(row, col, to)
-    i = row - 1
-    j = col - 1
-    while i < to[0] - 1 && j < to[1] - 1
-      arr = [] << [i, j]
-      @attacker_path = arr
-      return false if @board[i][j].sign != ' '
-
-      i -= 1
-      j -= 1
-    end
-    true
-  end
-
-  def up_right(row, col, to)
-    i = row - 1
-    j = col + 1
-    while i < to[0] - 1 && j > to[1] + 1
-      arr = [] << [i, j]
-      @attacker_path = arr
-      return false if @board[i][j].sign != ' '
-
-      i -= 1
-      j += 1
-    end
-    true
-  end
-
-  def down_left(row, col, to)
-    i = row + 1
-    j = col - 1
-    while i < to[0] - 1 && j > to[1] + 1
-      arr = [] << [i, j]
-      @attacker_path = arr
-      return false if @board[i][j].sign != ' '
-
-      i += 1
-      j -= 1
-    end
-    true
-  end
-
-  def down_right(row, col, to)
-    i = row + 1
-    j = col + 1
-    while i < to[0] - 1 && j < to[1] - 1
-      arr = [] << [i, j]
-      @attacker_path = arr
-      return false if @board[i][j].sign != ' '
-
-      i += 1
-      j += 1
-    end
-    true
   end
 end
