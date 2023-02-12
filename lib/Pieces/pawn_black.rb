@@ -16,11 +16,11 @@ class BlackPawn < Piece
       false
     elsif [end_row,
            end_column] == [start_row - 1,
-                           start_column + 1] && board[end_row][end_column].sign != ' '
+                           start_column + 1] && board[end_row][end_column].sign != '   '
       false
     elsif [end_row,
            end_column] == [start_row - 1,
-                           start_column - 1] && board[end_row][end_column].sign != ' '
+                           start_column - 1] && board[end_row][end_column].sign != '   '
       false
     else
       true
