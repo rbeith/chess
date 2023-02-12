@@ -7,4 +7,4 @@ require_relative 'chess_board'
 require 'yaml'
 Dir['./lib/Pieces/*'].sort.each { |file| require file }
 
-Game.new.load_game
+# Game.new.load_game

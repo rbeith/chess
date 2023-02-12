@@ -7,7 +7,7 @@ require_relative 'bishop_moves'
 class WhiteBishop < Piece
   include Bishopmoves
 
-  def initialize(sign: '♗', position: [nil])
+  def initialize(sign: ' ♗ ', position: [nil])
     super
     @sign = sign
     @color = 'white'

@@ -5,7 +5,7 @@
 class Piece
   attr_reader :alive, :dead, :sign, :position, :color, :moves, :type
 
-  def initialize(sign: ' ', position: [nil])
+  def initialize(sign: '   ', position: [nil])
     @sign = sign
     @position = position
     @color = nil
@@ -20,6 +20,7 @@ class Piece
   end
 
   def update_position(row, col)
-    @position = [row, col]
+		@position = [row, col]
   end
+	
 end

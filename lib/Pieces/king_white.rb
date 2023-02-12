@@ -6,7 +6,7 @@ require_relative 'king_moves'
 class WhiteKing < Piece
   include Kingmoves
 
-  def initialize(sign: '♔', position: [nil])
+  def initialize(sign: ' ♔ ', position: [nil])
     super
     @sign = sign
     @position = position

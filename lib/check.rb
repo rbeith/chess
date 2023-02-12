@@ -8,9 +8,9 @@ module Check
   # TODO: If king is taken #gameover
   def king_color(piece)
     if color(piece) == 'white'
-      @black_king
+      @black_king.piece
     else
-      @white_king
+      @white_king.piece
     end
   end
 
@@ -73,7 +73,7 @@ module Check
 
   def king_move_blocked?(king)
     blocked = false
-    king.possible_moves.each do |m|
+    king.piece.possible_moves.each do |m|
       move = [(row(king) + m[0]), (column(king) + m[1])]
       next unless forbidden?(position(king), move, king) == false
 

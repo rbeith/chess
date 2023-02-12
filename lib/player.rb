@@ -8,7 +8,9 @@ class Player
 
   def initialize(name: 'player', color: nil)
     @name = name
-		@color = color
+    @color = color
+		@space = ''
+		@piece = ''
   end
 
   def input(_space, _piece)
@@ -36,7 +38,7 @@ class Player
   end
 
   def translate_piece_selection
-    @piece = board_location(piece)
+    @piece = board_location(@piece)
   end
 
   def select_space
@@ -44,10 +46,10 @@ class Player
   end
 
   def translate_space_selection
-    @space = board_location(space)
+    @space = board_location(@space)
   end
 
-  def board_location(input = gets.chomp)
+  def board_location(input)
     arr = input.split(//)
     arr[0] = letter_to_row(arr[0].to_sym)
     arr[1] = arr[1].to_i - 1

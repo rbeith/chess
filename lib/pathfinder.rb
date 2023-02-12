@@ -26,7 +26,7 @@ module Pathfinder
   end
 
   def empty_space?(row, col)
-    true if @board[row][col].sign != ' '
+    true if sign(locate_piece(row, col)) != '   '
   end
 
   def up(row, col, to)

@@ -2,7 +2,7 @@
 
 # Black Pawn class with movement conditions
 class BlackPawn < Piece
-  def initialize(sign: '♟︎', position: [nil])
+  def initialize(sign: ' ♟︎ ', position: [nil])
     super
     @sign = sign
     @color = 'black'

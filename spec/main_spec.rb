@@ -25,20 +25,23 @@ describe Board do
       it 'moves a game piece to a new space' do
         allow(player1).to receive(:piece).and_return([1, 0])
         allow(player1).to receive(:space).and_return([2, 0])
+				allow(movement).to receive(:check?).and_return nil
         movement.move_piece(player1)
-        expect(movement.board[2][0].sign).to eq('♙')
+        expect(movement.board[2][0].sign).to eq(' ♙ ')
       end
 
       it 'resets the previous space' do
         allow(player1).to receive(:piece).and_return([1, 0])
         allow(player1).to receive(:space).and_return([2, 0])
+				allow(movement).to receive(:check?).and_return nil
         movement.move_piece(player1)
-        expect(movement.board[1][0].sign).to eq(' ')
+        expect(movement.board[1][0].sign).to eq('   ')
       end
 
-      it 'updates #position of piece' do
+      it 'updates #@position of piece' do
         allow(player1).to receive(:piece).and_return([1, 0])
         allow(player1).to receive(:space).and_return([2, 0])
+				allow(movement).to receive(:check?).and_return nil
         movement.move_piece(player1)
         expect(movement.board[2][0].position).to eq([2, 0])
       end
@@ -60,11 +63,24 @@ describe Board do
   context 'when a piece is in check' do
     subject(:check) { described_class.new }
 
+    describe '#king_move_blocked' do
+      it 'declares true if king cannot move without being in check' do
+        check.board = Array.new(3, Array.new(3, Space.new(piece: Piece.new)))
+        king = check.board[0][1] = Space.new(piece: WhiteKing.new(position: [0, 1]))
+        check.board[0][0] = WhitePawn.new(position: [0, 0])
+        check.board[1][0] = WhitePawn.new(position: [1, 0])
+        check.board[0][2] = WhitePawn.new(position: [0, 2])
+        check.attacker_path = [[1, 1]]
+        check.board[2][2] = BlackQueen.new(position: [2, 2])
+        expect(check.king_move_blocked?(king)).to be true
+      end
+    end
+
     describe '#check' do
       it 'declares check true' do
 				check.board = Array.new(3, Array.new(3, Piece.new))
         king = check.board[1][0] = BlackKing.new(position: [1, 0])
-				check.instance_variable_set(:@black_king, king)
+        check.instance_variable_set(:@black_king, king)
 				rook = check.board[1][2] = WhiteRook.new(position: [1, 2])
         expect(check.check?(rook)).to be true
       end
@@ -80,8 +96,8 @@ describe Board do
         check.board[2][2] = BlackQueen.new
         queen = check.board[2][2]
         queen.update_position(2, 2)
-        check.checkmate?(king)
-        expect(check.checkmate).to be true
+        check.check_blocking_pieces?(king)
+        expect(check.check_blocking_pieces?(king)).to be true
       end
 
       it 'does not declare checkmate when piece can block move to king space' do
@@ -93,7 +109,7 @@ describe Board do
         queen = check.board[3][3] = BlackQueen.new
         queen.update_position(3, 3)
         check.attacker_path = [[1, 1], [2, 2]]
-        expect(check.checkmate?(king)).to be false
+        expect(check.check_blocking_pieces?(king)).to be false
       end
     end
   end
@@ -159,18 +175,17 @@ describe Player do
     subject(:inputs) { described_class.new }
 
     it 'accepts a two character input and returns array coordinates' do
-      allow(inputs).to receive(:gets).and_return('b1')
-      expect(inputs.board_location).to eq([0, 1])
+      expect(inputs.board_location('b1')).to eq([0, 1])
     end
   end
 
   describe '#select_piece' do
     subject(:piece) { described_class.new }
 
-    it 'allows user to select space and returns board coordinates' do
+    it 'allows user to select piece and returns board coordinates' do
       allow(piece).to receive(:gets).and_return('b1')
-      piece.select_piece
-      expect(piece.board_location).to eq([0, 1])
+      input = piece.select_piece
+      expect(piece.board_location(input)).to eq([0, 1])
     end
   end
 
@@ -178,11 +193,9 @@ describe Player do
     subject(:space) { described_class.new }
 
     it 'allows user to select space and returns board coordinates' do
-      allow(space).to receive(:gets).and_return('a1')
-      space.select_piece
       allow(space).to receive(:gets).and_return('b1')
-      space.select_space
-      expect(space.board_location).to eq([0, 1])
+			input = space.select_space
+      expect(space.board_location(input)).to eq([0, 1])
     end
   end
 end

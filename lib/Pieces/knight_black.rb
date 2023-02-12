@@ -7,7 +7,7 @@ require_relative 'knight_moves'
 class BlackKnight < Piece
   include KnightMoves
 
-  def initialize(sign: '♞', position: [nil])
+  def initialize(sign: ' ♞ ', position: [nil])
     super
     @sign = sign
     @color = 'black'

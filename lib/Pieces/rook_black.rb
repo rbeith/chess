@@ -6,7 +6,7 @@ require_relative 'rook_moves'
 class BlackRook < Piece
   include Rookmoves
 
-  def initialize(sign: '♜', position: [nil])
+  def initialize(sign: ' ♜ ', position: [nil])
     super
     @sign = sign
     @color = 'black'
