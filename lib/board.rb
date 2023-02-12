@@ -23,9 +23,9 @@ class Board
 
 	def make_row(row, col)
 		if (col).even?
-			"\e[#{1};#{40}m#{ @board[row][col].piece.sign }\e[0m"
+			"\e[#{1};#{40}m#{ @board[row][col].sign }\e[0m"
 		else 
-			"\e[#{1};#{42}m#{ @board[row][col].piece.sign }\e[0m"
+			"\e[#{1};#{42}m#{ @board[row][col].sign }\e[0m"
 		# " #{@board[row][col].sign} "
 		end 
 	end
@@ -68,6 +68,7 @@ class Board
   # end
 
   def move_piece(player, starting_position: player.piece, ending_position: player.space)
+		@current_player = player
     start_piece = locate_piece(starting_position[0], starting_position[1])
     start_piece.update_position(ending_position[0], ending_position[1])
     assign_new_space(ending_position, starting_position)
@@ -77,7 +78,7 @@ class Board
   end
 
   def locate_piece(row, col)
-    @board[row][col].piece
+    @board[row][col]
   end
 
 	def row_from(input)
