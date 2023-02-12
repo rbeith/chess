@@ -8,9 +8,9 @@ module Check
   # TODO: If king is taken #gameover
   def king_color(piece)
     if color(piece) == 'white'
-      @black_king.piece
+      @black_king
     else
-      @white_king.piece
+      @white_king
     end
   end
 
@@ -38,7 +38,7 @@ module Check
     @board.each do |row|
       row.each do |piece|
         # FIXME: Players own piece movement reveals their king in check?
-        next unless color(piece) != color(king) && sign(piece) != ' ' && piece != king
+        next unless color(piece) != color(king) && sign(piece) != '   ' && piece != king
 
         next unless forbidden?([row(piece), column(piece)],
                                [row(king), column(king)],
@@ -73,7 +73,7 @@ module Check
 
   def king_move_blocked?(king)
     blocked = false
-    king.piece.possible_moves.each do |m|
+    king.possible_moves.each do |m|
       move = [(row(king) + m[0]), (column(king) + m[1])]
       next unless forbidden?(position(king), move, king) == false
 
