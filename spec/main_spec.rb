@@ -65,8 +65,8 @@ describe Board do
 
     describe '#king_move_blocked' do
       it 'declares true if king cannot move without being in check' do
-        check.board = Array.new(3, Array.new(3, Space.new(piece: Piece.new)))
-        king = check.board[0][1] = Space.new(piece: WhiteKing.new(position: [0, 1]))
+        check.board = Array.new(3, Array.new(3, Piece.new))
+        king = check.board[0][1] = WhiteKing.new(position: [0, 1])
         check.board[0][0] = WhitePawn.new(position: [0, 0])
         check.board[1][0] = WhitePawn.new(position: [1, 0])
         check.board[0][2] = WhitePawn.new(position: [0, 2])
@@ -81,6 +81,8 @@ describe Board do
 				check.board = Array.new(3, Array.new(3, Piece.new))
         king = check.board[1][0] = BlackKing.new(position: [1, 0])
         check.instance_variable_set(:@black_king, king)
+				name = 'PLAYER'
+				check.instance_variable_set(:@current_player, :name)
 				rook = check.board[1][2] = WhiteRook.new(position: [1, 2])
         expect(check.check?(rook)).to be true
       end
