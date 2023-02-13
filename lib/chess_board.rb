@@ -9,7 +9,7 @@ module ChessBoard
   # Will require changes to tests.
   def new_board
     @board = Array.new(8) { Array.new(8, Piece.new) }
-		place_pieces
+    place_pieces
   end
 
   def place_pieces

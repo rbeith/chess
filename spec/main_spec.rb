@@ -25,7 +25,7 @@ describe Board do
       it 'moves a game piece to a new space' do
         allow(player1).to receive(:piece).and_return([1, 0])
         allow(player1).to receive(:space).and_return([2, 0])
-				allow(movement).to receive(:check?).and_return nil
+        allow(movement).to receive(:check?).and_return nil
         movement.move_piece(player1)
         expect(movement.board[2][0].sign).to eq(' ♙ ')
       end
@@ -33,7 +33,7 @@ describe Board do
       it 'resets the previous space' do
         allow(player1).to receive(:piece).and_return([1, 0])
         allow(player1).to receive(:space).and_return([2, 0])
-				allow(movement).to receive(:check?).and_return nil
+        allow(movement).to receive(:check?).and_return nil
         movement.move_piece(player1)
         expect(movement.board[1][0].sign).to eq('   ')
       end
@@ -41,7 +41,7 @@ describe Board do
       it 'updates #@position of piece' do
         allow(player1).to receive(:piece).and_return([1, 0])
         allow(player1).to receive(:space).and_return([2, 0])
-				allow(movement).to receive(:check?).and_return nil
+        allow(movement).to receive(:check?).and_return nil
         movement.move_piece(player1)
         expect(movement.board[2][0].position).to eq([2, 0])
       end
@@ -78,12 +78,12 @@ describe Board do
 
     describe '#check' do
       it 'declares check true' do
-				check.board = Array.new(3, Array.new(3, Piece.new))
+        check.board = Array.new(3, Array.new(3, Piece.new))
         king = check.board[1][0] = BlackKing.new(position: [1, 0])
         check.instance_variable_set(:@black_king, king)
-				name = 'PLAYER'
-				check.instance_variable_set(:@current_player, :name)
-				rook = check.board[1][2] = WhiteRook.new(position: [1, 2])
+        name = 'PLAYER'
+        check.instance_variable_set(:@current_player, :name)
+        rook = check.board[1][2] = WhiteRook.new(position: [1, 2])
         expect(check.check?(rook)).to be true
       end
     end
@@ -196,7 +196,7 @@ describe Player do
 
     it 'allows user to select space and returns board coordinates' do
       allow(space).to receive(:gets).and_return('b1')
-			input = space.select_space
+      input = space.select_space
       expect(space.board_location(input)).to eq([0, 1])
     end
   end

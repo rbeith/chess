@@ -7,6 +7,7 @@ class WhitePawn < Piece
     @sign = sign
     @color = 'white'
     @position = position
+    set_piece_color
   end
 
   def illegal?(board, start_row, start_column, end_row, end_column)

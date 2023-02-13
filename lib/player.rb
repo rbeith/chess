@@ -9,8 +9,8 @@ class Player
   def initialize(name: 'player', color: nil)
     @name = name
     @color = color
-		@space = ''
-		@piece = ''
+    @space = ''
+    @piece = ''
   end
 
   def input(_space, _piece)

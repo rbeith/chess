@@ -2,7 +2,6 @@
 
 # Movement conditions for Kings
 module Kingmoves
-	
   def possible_moves
     possible_moves = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
   end

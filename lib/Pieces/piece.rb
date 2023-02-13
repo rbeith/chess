@@ -9,6 +9,7 @@ class Piece
     @sign = sign
     @position = position
     @color = nil
+    set_piece_color
   end
 
   def captured
@@ -20,7 +21,14 @@ class Piece
   end
 
   def update_position(row, col)
-		@position = [row, col]
+    @position = [row, col]
   end
-	
+
+  def set_piece_color
+    if @color == 'white'
+      @sign.colorize(color: :green, mode: :bold)
+    else
+      @sign.colorize(color: :blue, mode: :bold)
+    end
+  end
 end

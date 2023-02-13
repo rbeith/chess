@@ -14,7 +14,7 @@ module Check
     end
   end
 
-	def color(piece)
+  def color(piece)
     piece.color
   end
 

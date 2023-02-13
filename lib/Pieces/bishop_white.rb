@@ -12,5 +12,6 @@ class WhiteBishop < Piece
     @sign = sign
     @color = 'white'
     @position = position
+    set_piece_color
   end
 end
