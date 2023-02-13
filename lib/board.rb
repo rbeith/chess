@@ -21,28 +21,39 @@ class Board
     @attacker_path = []
   end
 
-	def make_row(row, col)
-		if (col).even?
-			"\e[#{1};#{40}m#{ @board[row][col].sign }\e[0m"
-		else 
-			"\e[#{1};#{42}m#{ @board[row][col].sign }\e[0m"
-		# " #{@board[row][col].sign} "
+	def draw_board
+		system 'clear'
+		print row_coordinates
+		0.upto(7) do |row|
+			print "#{column_coordinates(row)}" 
+			assemble_row(row)
+			print "#{column_coordinates(row)}"
+			print "\n"
+		end
+		print row_coordinates
+	end
+
+	def row_coordinates
+		"    A   B   C   D   E   F   G   H     \n".colorize( :background => :light_black )
+	end
+
+	def column_coordinates(row_num)
+		" #{row_num + 1} ".colorize( :background => :light_black )
+	end
+
+	def board_square(row, col)
+		if (row + col).even?
+			"#{@board[row][col].sign} ".colorize( :background => :light_white)
+		else
+			"#{@board[row][col].sign} ".colorize( :background => :light_blue)
 		end 
 	end
 
-	def columnize(row)
-		0.upto(7) do |col|
-			print make_row(row, col)
-		end
-		print "\n"
+	def assemble_row(row_num)
+		row = 0.upto(7) { |col_num| print board_square(row_num, col_num) }
 	end 
 
-	def draw_board
-		system 'clear'
-	  0.upto(7) do |row|
-			columnize(row)
-		end
-	end
+
 
   # def draw_board
 	
